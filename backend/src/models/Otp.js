@@ -8,12 +8,12 @@ const otpSchema = new mongoose.Schema(
     name: { type: String },
     password: { type: String },
 
-    // expires in 5 min
+    // Expires in 5 minutes
     expiresAt: {
       type: Date,
       default: () => Date.now() + 5 * 60 * 1000,
-      index: { expires: "5m" },
-    },
+      expires: 300 // <-- 5 minutes (Mongoose correct TTL index)
+    }
   },
   { timestamps: true }
 );
