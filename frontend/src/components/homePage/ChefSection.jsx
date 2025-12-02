@@ -14,7 +14,7 @@ const ChefSection = () => {
                 md:w-[520px] lg:w-[560px]"
             />
 
-            <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center gap-12">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col-reverse md:flex-row items-center gap-12">
 
                 {/* Image Section */}
                 <div className="flex-1">
@@ -40,7 +40,7 @@ const ChefSection = () => {
                         <br /> baked just for you
                     </h2>
 
-                    <p className="mt-5 text-gray-700 text-lg leading-relaxed">
+                    <p className="mt-5 text-gray-700 text-lg leading-relaxed font-semibold">
                         We bake delicious treats with the finest ingredients. From warm chocolate chip cookies
                         to flaky croissants, every bite is filled with love, warmth, and flavor. Come experience
                         the magic of our bakery.

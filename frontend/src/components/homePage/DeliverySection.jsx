@@ -39,7 +39,7 @@ const DeliverySection = () => {
                     {/* Learn More */}
                     <Link to="/delivery">
                         <button className="px-6 py-2 rounded-full bg-[#fff9f4] text-[#8b5e3c] font-bold shadow-lg hover:shadow-xl hover:scale-105 transition cursor-pointer mt-5">
-                            Learn More <span className="text-xl">→</span>
+                            Learn More <span className="text-lg pt-6">→</span>
                         </button>
                     </Link>
                 </div>
@@ -50,7 +50,7 @@ const DeliverySection = () => {
                         <img
                             src="https://i.pinimg.com/736x/97/a9/8f/97a98f8f856e20ed0a23e807133dafa6.jpg"
                             alt="Delivery"
-                            className="rounded-[2rem] object-cover w-full h-[340px]"
+                            className="rounded-[2rem] object-cover w-full h-[380px]"
                         />
                     </div>
                 </div>

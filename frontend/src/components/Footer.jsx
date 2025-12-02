@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
     FaEnvelope,
     FaLinkedin,
-    FaInstagram,
+    FaInstagram,  
     FaFacebook,
     FaMapMarkerAlt,
     FaArrowRight,
@@ -75,11 +75,11 @@ const Footer = () => {
 
                     <ul className="space-y-3 text-[#F9FBFB]">
                         {[
-                            { path: "#", label: "Custom Cakes" },
-                            { path: "#", label: "Birthday Cakes" },
-                            { path: "#", label: "Wedding Cakes" },
-                            { path: "#", label: "Party Catering" },
-                            { path: "#", label: "Customize Cake" },
+                            { path: "/birthdaycake", label: "Birthday Cakes" },
+                            { path: "/weddingcake", label: "Wedding Cakes" },
+                            { path: "/customcake", label: "Custom Cakes" },
+                            { path: "/partycake", label: "Party Catering" },
+                            { path: "/customizecake", label: "Customize Cake" },
                         ].map((item) => (
                             <li key={item.path}>
                                 <Link
@@ -126,10 +126,10 @@ const Footer = () => {
                     <div className="flex gap-5 mt-6 text-xl text-[#F9FBFB]">
                         {[
                             { icon: FaLinkedin, path: "https://www.linkedin.com/company/graphura-india-private-limited/posts/?feedView=all" },
-                            { icon: FaInstagram, path: "/instagram" },
-                            { icon: FaFacebook, path: "/facebook" },
-                            { icon: FaXTwitter, path: "/x" },
-                            { icon: FaMapMarkerAlt, path: "/map" },
+                            { icon: FaInstagram, path: "https://www.instagram.com/graphura.in?igsh=MXh0Zmt6eXB4NnpjNQ==" },
+                            { icon: FaFacebook, path: "https://www.facebook.com/Graphura.in" },
+                            { icon: FaXTwitter, path: "https://x.com/Graphura" },
+                            { icon: FaMapMarkerAlt, path: "https://maps.app.goo.gl/DoXYDapgZWJix4uE7" },
                         ].map((item, index) => {
                             const Icon = item.icon;
                             return (

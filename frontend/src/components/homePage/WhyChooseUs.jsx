@@ -27,8 +27,10 @@ const WhyChooseUs = () => {
     ];
 
     return (
-        <section className="bg-[#fff9f4]">
-            <div className="py-20 px-6 md:px-10 max-w-7xl mx-auto">
+        <section className="relative bg-[#fff9f4] overflow-hidden">
+
+
+            <div className="relative py-20 px-6 md:px-10 max-w-7xl mx-auto">
                 <motion.h2
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -56,7 +58,7 @@ const WhyChooseUs = () => {
                             <h3 className="text-xl font-semibold text-[#b75a90] mb-2">
                                 {item.title}
                             </h3>
-                            <p className="text[#4a3f35]">{item.desc}</p>
+                            <p className="text-[#4a3f35]">{item.desc}</p>
                         </motion.div>
                     ))}
                 </div>

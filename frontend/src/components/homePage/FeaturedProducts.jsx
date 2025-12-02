@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const featuredProducts = [
     {
-        name: "Chocolate Truffle Cake",
+        name: "Chocolate Cake",
         path: "/",
         price: "$25",
         tagline: "Rich • Moist • Melt-in-Your-Mouth",
@@ -23,14 +23,14 @@ const featuredProducts = [
         name: "Donuts",
         path: "/",
         price: "$10",
-        tagline: "Soft, Sweet & Natural Colorfull",
+        tagline: "Soft, Fluffy & Melt-in-Your-Mouth Good",
         description:
-            "A soft and airy donut coated in a delicate glaze that melts with every bite. Crafted to perfection with rich vanilla notes.",
+            "A light and airy donut coated with a smooth sugary glaze for the perfect sweetness. Soft, fresh, and irresistible with every single bite.",
         specials: [
-            "Hand-mixed fluffy batter",
-            "Madagascar vanilla",
-            "Kid-friendly favorite",
-            "Premium buttercream frosting"
+            "Hand-crafted fluffy dough",
+            "Perfectly balanced sweetness",
+            "Golden fried for a soft bite",
+            "Freshly made every morning"
         ],
         image:
             "https://i.pinimg.com/736x/4d/96/a5/4d96a582a7371cee7e5a342faecca78d.jpg"
@@ -39,37 +39,36 @@ const featuredProducts = [
         name: "Strawberry Pastry",
         path: "/",
         price: "$12",
-        tagline: "Fresh Strawberries in Every Bite",
+        tagline: "Bursting With Real Strawberry Flavor",
         description:
-            "Soft sponge pastry layered with whipped cream and real strawberries. Light, fruity, and perfect for summer cravings.",
+            "A soft and fluffy pastry layered with silky cream and juicy strawberry filling. Sweet, refreshing, and the perfect fruity delight for any occasion.",
         specials: [
-            "Real strawberry puree",
-            "Light whipped cream",
-            "Soft airy sponge",
-            "Perfect refreshing treat"
+            "Made with real strawberry pulp",
+            "Light and creamy texture",
+            "Moist vanilla sponge base",
+            "Naturally sweet and refreshing"
         ],
         image:
             "https://i.pinimg.com/1200x/30/29/3f/30293f670a7fb51be8ad92b05bf0a566.jpg"
     },
     {
-        name: "Strawberry Pastry",
+        name: "Customize Cookies",
         path: "/",
-        price: "$12",
-        tagline: "Fresh Strawberries in Every Bite",
+        price: "$8",
+        tagline: "Crispy • Chewy • Irresistibly Delicious",
         description:
-            "Soft sponge pastry layered with whipped cream and real strawberries. Light, fruity, and perfect for summer cravings.",
+            "A perfectly baked cookie with a golden crisp edge and a soft, chewy center. Loaded with rich chocolate chunks and baked fresh for the ultimate comfort treat.",
         specials: [
-            "Real strawberry puree",
-            "Light whipped cream",
-            "Soft airy sponge",
-            "Perfect refreshing treat"
+            "Premium chocolate chunks",
+            "Soft and chewy center",
+            "Freshly baked in small batches",
+            "Perfect for all-day snacking"
         ],
         image:
-            "https://i.pinimg.com/1200x/30/29/3f/30293f670a7fb51be8ad92b05bf0a566.jpg"
+            "https://i.pinimg.com/736x/43/28/5c/43285c85ace909ad5af96ce9eeaa8663.jpg"
     }
 ];
 
-// Motion variants
 const fadeUp = {
     hidden: { opacity: 0, y: 40 },
     visible: {
@@ -109,7 +108,13 @@ const FeaturedProducts = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="max-w-7xl mx-auto px-6 grid sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12"
+                className="max-w-7xl mx-auto px-6 
+                           grid 
+                           grid-cols-1 
+                           sm:grid-cols-2 
+                           md:grid-cols-2 
+                           lg:grid-cols-4 
+                           gap-10"
             >
                 {featuredProducts.map((item, idx) => (
                     <motion.div
@@ -119,7 +124,8 @@ const FeaturedProducts = () => {
                         transition={{ type: "spring", stiffness: 180 }}
                         className="bg-[#fff9f4] rounded-2xl shadow-lg hover:shadow-2xl 
                                    border border-transparent hover:border-[#c89f7a]/60 
-                                   transition-all duration-300 hover:-translate-y-2"
+                                   transition-all duration-300 hover:-translate-y-2 
+                                   flex flex-col"
                     >
                         {/* Image */}
                         <motion.img
@@ -130,14 +136,20 @@ const FeaturedProducts = () => {
                         />
 
                         {/* Content */}
-                        <div className="p-6">
+                        <div className="p-6 flex flex-col flex-grow">
+
+                            {/* Title */}
                             <h3 className="text-xl sm:text-2xl font-bold text-[#8b5e3c]">
                                 {item.name}
                             </h3>
 
-                            <p className="text-[#8b5e3c] mt-1 italic">{item.tagline}</p>
+                            {/* Tagline */}
+                            <p className="text-[#8b5e3c] mt-1 italic">
+                                {item.tagline}
+                            </p>
 
-                            <p className="mt-3 text-[#6f472b] leading-relaxed text-sm">
+                            {/* Description */}
+                            <p className="mt-3 text-[#6f472b] leading-relaxed text-sm flex-grow">
                                 {item.description}
                             </p>
 
@@ -151,7 +163,7 @@ const FeaturedProducts = () => {
                                     <motion.button
                                         whileTap={{ scale: 0.92 }}
                                         whileHover={{ scale: 1.08 }}
-                                        className="px-6 py-2 rounded-full bg-gradient-to-r from-[#dda56a] to-[#e8b381] 
+                                        className="px-5 py-2 rounded-full bg-gradient-to-r from-[#dda56a] to-[#e8b381]
                                                    text-white font-semibold shadow-lg hover:shadow-xl 
                                                    transition-all duration-300 hover:brightness-110"
                                     >
@@ -176,7 +188,7 @@ const FeaturedProducts = () => {
                         <button
                             className="px-6 py-2 rounded-full bg-white text-[#8b5e3c] font-semibold 
                                        shadow-md hover:shadow-lg hover:-translate-y-1 
-                                       transition-all duration-300 hover:bg-[#f0e3d6] hover:text-[#6f472b]"
+                                       transition-all duration-300 hover:bg-[#f0e3d6] hover:text-[#6f472b] cursor-pointer"
                         >
                             See more
                         </button>
