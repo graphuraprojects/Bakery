@@ -101,37 +101,38 @@ router.post("/send-otp", async (req, res) => {
    VERIFY OTP
 ============================================================ */
 router.post("/verify-otp", async (req, res) => {
-  const { email, phone, otp } = req.body;
+  const { email, phone, otp, purpose } = req.body;
 
-  if (!otp || (!email && !phone)) {
-    return res.status(400).json({ message: "OTP & email/phone required" });
+  if (!otp) {
+    return res.status(400).json({ message: "OTP required" });
   }
 
+  // Build query
   const query = {};
+  if (email) query.email = email;
+  if (phone) query.phone = phone;
+  if (purpose) query.purpose = purpose; // for forgot-password
 
-  if (email && email !== "") query.email = email;
-  if (phone && phone !== "") query.phone = phone;
-
-  console.log("VERIFY QUERY:", query);
-
+  // Find latest OTP
   const record = await Otp.findOne(query).sort({ createdAt: -1 });
-  
-  console.log("DB RECORD:", record);
 
   if (!record) {
-    return res.status(400).json({ message: "OTP record not found" });
+    return res.status(400).json({ message: "OTP not found" });
   }
 
-  // ensure both OTPs are compared as string
   if (String(record.code) !== String(otp)) {
-    return res.status(400).json({ message: "Invalid or expired OTP" });
+    return res.status(400).json({ message: "Invalid OTP" });
   }
 
   if (record.expiresAt < Date.now()) {
     return res.status(400).json({ message: "OTP expired" });
   }
 
-  return res.status(200).json({ message: "OTP verified successfully" });
+  return res.status(200).json({
+    success: true,
+    message: "OTP verified",
+    purpose: record.purpose || "register", // default: registration
+  });
 });
 
 /* ============================================================

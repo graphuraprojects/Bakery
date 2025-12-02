@@ -15,6 +15,7 @@ import EditProfile from "./components/userProfile/EditProfile";
 import ContactUs from "./components/ContactUs";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import ResetPassword from "./components/auth/ResetPassword";
+import VerifyForgetPasswordOTP from "./components/auth/VerifyForgetPasswordOTP";
 
 export default function App() {
   return (
@@ -124,6 +125,18 @@ export default function App() {
       />
 
 
+            <ResetPassword />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/otp-verify"
+        element={
+          <AuthLayout>
+            <VerifyForgetPasswordOTP />
+          </AuthLayout>
+        }
+      />
     </Routes>
   );
 }
