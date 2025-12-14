@@ -37,7 +37,7 @@ const DeliverySection = () => {
                     </p>
 
                     {/* Learn More */}
-                    <Link to="/delivery">
+                    <Link to="/about">
                         <button className="px-6 py-2 rounded-full bg-[#fff9f4] text-[#8b5e3c] font-bold shadow-lg hover:shadow-xl hover:scale-105 transition cursor-pointer mt-5">
                             Learn More <span className="text-lg pt-6">→</span>
                         </button>

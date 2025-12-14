@@ -46,7 +46,7 @@ const ChefSection = () => {
                         the magic of our bakery.
                     </p>
 
-                    <Link to="/chef">
+                    <Link to="/about">
                         <button className="mt-6 text-[#c85a32] font-semibold text-lg flex items-center gap-2 hover:gap-3 transition-all duration-300 cursor-pointer">
                             Read More <span className="text-xl">→</span>
                         </button>

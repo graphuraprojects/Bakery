@@ -81,13 +81,7 @@ const Navbar = () => {
   // MENU ITEMS (layout like old navbar)
   const menuItems = [
     { name: "Home", path: "/" },
-    {
-      name: "Menu",
-      dropdown: categories.map((cat) => ({
-        label: cat,
-        path: `/menu?category=${encodeURIComponent(cat)}`,
-      })),
-    },
+    { name: "Menu", path: "/menu" },
     { name: "Custom Cake", path: "/customize" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact-us" },

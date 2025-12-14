@@ -53,6 +53,7 @@ import Customers from "./components/admin/CustomerDetail";
 import CreateAdmin from "./components/admin/CreateAdmin";
 import AdminList from "./components/admin/AdminList";
 import AllUsers from "./components/admin/AllUsers";
+import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
   return (
@@ -88,6 +89,7 @@ export default function App() {
 
       {/* Wrap Routes with ErrorBoundary for global error handling */}
 
+      <ScrollToTop />
       <Routes>
         {/* ====================== DEFAULT ====================== */}
         <Route path="/" element={<Navigate to="/home" />} />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/Slice";
@@ -24,7 +24,7 @@ export default function FilterPage() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [setCategories] = useState([]);
   const [flavors, setFlavors] = useState([]);
   const [weights, setWeights] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 10000]);
@@ -48,6 +48,10 @@ export default function FilterPage() {
   // Auto-slide interval ref
   const slideIntervalRef = useRef(null);
 
+  const isLoggedIn = () => {
+    return Boolean(localStorage.getItem("userToken"));
+  };
+
   // Fetch featured products
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -62,6 +66,32 @@ export default function FilterPage() {
     };
     fetchFeatured();
   }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!location.state?.fromFooter) return;
+
+    const category = location.state.category;
+    if (!category) return;
+
+    const id = "category-" + category.trim().replace(/\s+/g, "-").toLowerCase();
+
+    const timer = setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      window.scrollTo({ top: 0, behavior: "instant" });
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // ✅ CRITICAL: clear navigation state
+      navigate(location.pathname, { replace: true, state: {} });
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [location.state, loading, navigate]);
 
   // Fetch all products
   useEffect(() => {
@@ -281,9 +311,17 @@ export default function FilterPage() {
   };
 
   const handleAddToCart = (e, product) => {
-    if (e) {
+    if (e?.preventDefault) {
       e.preventDefault();
       e.stopPropagation();
+    }
+
+    if (!product) return;
+
+    if (!isLoggedIn()) {
+      toast.error("Please login to add items to cart");
+      navigate("/login");
+      return;
     }
 
     if (product.stock <= 0) {
@@ -307,9 +345,17 @@ export default function FilterPage() {
   };
 
   const handleBuyNow = (e, product) => {
-    if (e) {
+    if (e?.preventDefault) {
       e.preventDefault();
       e.stopPropagation();
+    }
+
+    if (!product) return;
+
+    if (!isLoggedIn()) {
+      toast.error("Please login to continue");
+      navigate("/login");
+      return;
     }
 
     if (product.stock <= 0) {
@@ -317,7 +363,6 @@ export default function FilterPage() {
       return;
     }
 
-    // Add to cart first
     dispatch(
       addToCart({
         id: product._id,
@@ -328,11 +373,7 @@ export default function FilterPage() {
       })
     );
 
-    setShowProductModal(false);
-    setSelectedProduct(null);
-    // Redirect to order page
     navigate("/order");
-    toast.success("Redirecting to checkout...");
   };
 
   const handleProductClick = (product) => {
@@ -389,9 +430,9 @@ export default function FilterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fff9f4] pt-20">
+    <div className="min-h-screen bg-[#fff9f4]">
       {/* Hero Video Section */}
-      <section className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+      <section className="relative w-full min-h-[70vh] md:min-h-[60vh] overflow-hidden pt-20 pb-10">
         <video
           autoPlay
           loop
@@ -406,7 +447,7 @@ export default function FilterPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
 
         {/* Content - Left Aligned */}
-        <div className="relative z-10 h-full flex items-center">
+        <div className="relative z-10 h-full flex items-center py-10 sm:py-12 md:py-0">
           <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
               <motion.h1
@@ -636,25 +677,22 @@ export default function FilterPage() {
       )}
 
       {/* Main Content */}
-      <div className="w-full px-4 py-4 h-[100vh] overflow-y-scroll scrollbar-none">
+      <div className="w-full px-4 py-4">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Filter Sidebar */}
-          {/* Mobile Overlay */}
+          {/* Overlay background */}
           {showFilters && (
             <div
-              className="lg:hidden fixed inset-0 bg-black/50 z-40"
+              className="fixed inset-0 bg-black/50 z-40"
               onClick={() => setShowFilters(false)}
             />
           )}
-
+          {/* Filter Drawer */}
           <aside
-            className={`lg:w-80 flex-shrink-0 ${
-              showFilters
-                ? "fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto w-80 lg:w-auto"
-                : "hidden lg:block"
-            }`}
+            className={`fixed top-0 left-0 h-full w-80 bg-white z-50 shadow-2xl transform transition-transform duration-300
+  ${showFilters ? "translate-x-0" : "-translate-x-full"}`}
           >
-            <div className="bg-white rounded-xl shadow-lg p-6 h-full lg:max-h-[90vh] lg:sticky lg:top-4 overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-lg p-6 lg:h-screen lg:sticky lg:top-4 max-h-screen overflow-y-auto">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <h3 className="text-xl font-bold text-[#d78f52] flex items-center gap-2">
                   <FaFilter className="text-[#d78f52]" /> Filters
@@ -862,12 +900,12 @@ export default function FilterPage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md text-[#d78f52] font-medium hover:bg-gray-50"
+                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md text-[#d78f52] font-medium hover:bg-gray-50"
               >
                 <FaFilter /> {showFilters ? "Hide" : "Show"} Filters
               </button>
 
-              {/* <div className="flex items-center gap-3 sm:ml-auto w-fit">
+              <div className="flex items-center gap-3 sm:ml-auto w-fit">
                 <span className="text-sm font-medium text-gray-700">
                   Sort by:
                 </span>
@@ -881,7 +919,7 @@ export default function FilterPage() {
                   <option value="price_desc">Price: High to Low</option>
                   <option value="name_asc">Name: A to Z</option>
                 </select>
-              </div> */}
+              </div>
             </div>
 
             {/* Results Count */}
@@ -907,8 +945,9 @@ export default function FilterPage() {
                   ([category, products]) => (
                     <motion.section
                       key={category}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      id={`category-${category
+                        .replace(/\s+/g, "-")
+                        .toLowerCase()}`}
                       className="bg-white rounded-xl shadow-lg p-6 md:p-8"
                     >
                       <h2 className="text-2xl md:text-3xl font-bold text-[#8b5e3c] mb-6 pb-3 border-b-2 border-[#e2bf9d]">
@@ -1052,16 +1091,17 @@ export default function FilterPage() {
             >
               <div className="grid md:grid-cols-2 gap-0">
                 {/* Image Section */}
-                <div className="relative h-64 md:h-full min-h-[300px] overflow-hidden bg-gradient-to-br from-[#fff9f4] to-[#f0e3d6]">
+                <div className="relative h-64 md:h-full min-h-[300px] max-h-full overflow-hidden bg-gradient-to-br from-[#fff9f4] to-[#f0e3d6]">
                   <img
                     src={getImageUrl(selectedProduct.images?.[0])}
                     alt={selectedProduct.name}
-                    className="w-full h-40 object-cover"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
                     onError={(e) => {
                       e.target.src =
                         "https://via.placeholder.com/400x400?text=No+Image";
                     }}
                   />
+
                   {selectedProduct.isFeatured && (
                     <span className="absolute top-4 right-4 bg-[#8b5e3c] text-white text-xs font-bold px-3 py-1.5 rounded-full">
                       Featured
