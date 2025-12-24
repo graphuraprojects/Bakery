@@ -20,10 +20,20 @@ const OffersPage = () => {
     },
   ]);
 
-  // Function to handle adding new coupon
+  // ➕ Add new coupon
   const handleAddCoupon = (newCoupon) => {
-    setCoupons([...coupons, { ...newCoupon, id: coupons.length + 1 }]);
+    setCoupons([...coupons, { ...newCoupon, id: Date.now() }]);
     setShowModal(false);
+  };
+
+  // ❌ Delete coupon
+  const handleDeleteCoupon = (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this coupon?"
+    );
+    if (!confirmDelete) return;
+
+    setCoupons((prev) => prev.filter((c) => c.id !== id));
   };
 
   return (
@@ -48,17 +58,17 @@ const OffersPage = () => {
               <th className="py-3 px-4 text-left font-semibold">Action</th>
             </tr>
           </thead>
+
           <tbody>
             {coupons.map((c) => (
-              <tr key={c.id} className="hover:bg-gray-50 text-[#3f2e20]">
-                <td className="py-4 px-5 text-left font-semibold">{c.code}</td>
-                <td className="py-4 px-5 text-left font-semibold">
-                  {c.discount}
-                </td>
-                <td className="py-4 px-5 text-left font-semibold">
-                  {c.expiry}
-                </td>
-                <td className="py-4 px-5 text-left font-semibold">
+              <tr
+                key={c.id}
+                className="hover:bg-gray-50 text-[#3f2e20]"
+              >
+                <td className="py-4 px-5 font-semibold">{c.code}</td>
+                <td className="py-4 px-5 font-semibold">{c.discount}</td>
+                <td className="py-4 px-5 font-semibold">{c.expiry}</td>
+                <td className="py-4 px-5 font-semibold">
                   <span
                     className={`px-3 py-1 rounded-full text-sm font-medium ${
                       c.active
@@ -69,11 +79,13 @@ const OffersPage = () => {
                     {c.active ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="py-3 px-4 flex flex-wrap gap-2">
-                  <button className="px-3 py-1 bg-yellow-400 hover:bg-yellow-600 text-[#3f2e20] rounded-md text-sm">
-                    Edit
-                  </button>
-                  <button className="px-3 py-1 bg-red-400 hover:bg-red-600 text-white rounded-md text-sm">
+
+                {/* ✅ ONLY DELETE BUTTON */}
+                <td className="py-3 px-4">
+                  <button
+                    onClick={() => handleDeleteCoupon(c.id)}
+                    className="px-3 py-1 bg-red-400 hover:bg-red-600 text-white rounded-md text-sm"
+                  >
                     Delete
                   </button>
                 </td>

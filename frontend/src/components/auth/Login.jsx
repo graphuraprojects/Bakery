@@ -242,7 +242,21 @@ const Login = () => {
       </button>
 
       {/* Switch Type Hint */}
-      <div className="text-center mb-4">
+      <div className="flex justify-between items-center">
+        {/* Forgot Password */}
+{!isAdminLogin && (
+  <div className="">
+    <NavLink
+      to="/forgot-password"
+      className="text-sm font-medium text-[#c85a32] hover:text-[#b34a22] hover:underline transition-colors"
+    >
+      Forgot Password?
+    </NavLink>
+
+  </div>
+  
+)}
+
         <button
           type="button"
           onClick={() => toggleLoginType(isAdminLogin ? "user" : "admin")}
@@ -252,20 +266,20 @@ const Login = () => {
           <i className={`bx bx-${isAdminLogin ? "user" : "crown"} mr-1`}></i>
           Switch to {isAdminLogin ? "User" : "Admin"} Login
         </button>
+      
       </div>
+      
+{isAdminLogin && (
+  <div className="text-center mt-4">
+    <a
+      href="/super-admin/register"
+      className="inline-block text-[#c85a32] font-semibold hover:underline hover:text-[#b34a22] transition-colors"
+    >
+      Register for Super Admin
+    </a>
+  </div>
+)}
 
-      {/* Register Link (only for users) */}
-      {!isAdminLogin && (
-        <p className="text-center text-gray-600 mt-2">
-          Don't have an account?{" "}
-          <NavLink
-            to="/register"
-            className="text-[#c85a32] font-semibold hover:underline"
-          >
-            Register here
-          </NavLink>
-        </p>
-      )}
 
       {/* Error Message */}
       {message && (
@@ -278,9 +292,18 @@ const Login = () => {
       )}
 
       {/* Debug info (remove in production) */}
-      <div className="mt-4 p-2 bg-gray-100 rounded text-xs text-gray-500">
+      {/* <div className="mt-4 p-2 bg-gray-100 rounded text-xs text-gray-500">
         <p>Debug: Storing token as "token" and "userToken"</p>
-      </div>
+      </div> */}
+          <p className="text-center text-sm text-gray-600 mt-3">
+  Don’t have an account?{" "}
+  <NavLink
+    to="/register"
+    className="text-[#c85a32] font-semibold hover:underline"
+  >
+    Register
+  </NavLink>
+</p>
     </form>
   );
 
@@ -290,6 +313,7 @@ const Login = () => {
         <div className="w-16 h-16 border-4 border-[#dfa26d] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-gray-600 font-medium">
           Switching to {!isAdminLogin ? "Admin" : "User"} login...
+          
         </p>
       </div>
     </div>

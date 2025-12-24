@@ -5,11 +5,12 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import logo from "../assets/homePage/logo White.png";
 import { FaShoppingCart } from "react-icons/fa";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const cart = useSelector((state) => state.cart || { items: [] });
@@ -41,42 +42,40 @@ const Navbar = () => {
   }, []);
 
   // Sync user
-  useEffect(() => {
-    const syncUser = async () => {
-      try {
-        const stored = localStorage.getItem("userInfo");
+useEffect(() => {
+  const syncUser = async () => {
+    try {
+      const storedUser = localStorage.getItem("userInfo");
+      const storedAdmin = localStorage.getItem("adminInfo");
 
-        if (stored) {
-          setUser(JSON.parse(stored));
-        } else {
-          const token = localStorage.getItem("userToken");
-          if (!token) return setUser(null);
-
-          const res = await axios.get("http://localhost:5000/api/auth/me", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          const u = res.data.user || res.data;
-          const cleaned = {
-            id: u.id || u._id,
-            username: u.username,
-            email: u.email,
-            profilePicture: u.profilePicture || "",
-          };
-          setUser(cleaned);
-          localStorage.setItem("userInfo", JSON.stringify(cleaned));
-        }
-      } catch {
-        localStorage.removeItem("userToken");
-        localStorage.removeItem("userInfo");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else if (storedAdmin) {
+        const admin = JSON.parse(storedAdmin);
+        setUser({
+          id: admin.id,
+          username: "Admin",
+          email: admin.email,
+          role: admin.role,
+          profilePicture: "", // ya koi admin avatar
+        });
+      } else {
         setUser(null);
       }
-    };
+    } catch {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminInfo");
+      setUser(null);
+    }
+  };
 
-    syncUser();
-    window.addEventListener("storage", syncUser);
-    return () => window.removeEventListener("storage", syncUser);
-  }, []);
+  syncUser();
+  window.addEventListener("storage", syncUser);
+  return () => window.removeEventListener("storage", syncUser);
+}, []);
+
 
   // MENU ITEMS (layout like old navbar)
   const menuItems = [
@@ -164,7 +163,7 @@ const Navbar = () => {
               className="px-6 py-2 rounded-full bg-white 
               text-[#8b5e3c] font-semibold shadow-lg hover:scale-105 transition border border-[#6f482a]"
             >
-              Order Now
+              Order
             </button>
           </Link>
 
@@ -192,11 +191,12 @@ const Navbar = () => {
               <Link to="/profile">
                 <div className="w-10 h-10 rounded-full overflow-hidden hover:scale-110 transition">
                   {user?.profilePicture ? (
-                    <img
-                      src={user.profilePicture}
-                      alt="profile"
-                      className="w-full h-full object-cover"
-                    />
+                   <img
+  src={getImageUrl(user.profilePicture)}
+  alt="profile"
+  className="w-full h-full object-cover"
+/>
+
                   ) : (
                     <div className="w-full h-full bg-[#d78f52] text-white flex items-center justify-center text-lg font-bold">
                       {user?.username?.charAt(0).toUpperCase()}
@@ -211,7 +211,7 @@ const Navbar = () => {
                 className="px-6 py-2 rounded-full bg-white 
                 text-[#8b5e3c] font-semibold shadow-lg hover:scale-105 transition border border-[#6f482a]"
               >
-                Login Now
+                Login
               </button>
             </Link>
           )}
@@ -286,11 +286,12 @@ const Navbar = () => {
               <Link to="/profile">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
                   {user?.profilePicture ? (
-                    <img
-                      src={user.profilePicture}
-                      alt="profile"
-                      className="w-full h-full object-cover"
-                    />
+                   <img
+  src={getImageUrl(user.profilePicture)}
+  alt="profile"
+  className="w-full h-full object-cover"
+/>
+
                   ) : (
                     <div className="w-full h-full bg-[#d78f52] text-white flex items-center justify-center text-lg font-bold">
                       {user?.username?.charAt(0).toUpperCase()}

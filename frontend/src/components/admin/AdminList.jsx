@@ -9,11 +9,24 @@ const AdminList = () => {
     try {
       const token = localStorage.getItem("adminToken");
 
-      const res = await axios.get("http://localhost:5000/api/admin/admins", {
+      const res = await axios.get("/api/admin/admins", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setAdmins(res.data.admins || []);
+      const adminsData = res.data.admins || [];
+
+      // 🔥 SORTING LOGIC
+      const superAdmins = adminsData.filter(
+        (a) => a.role === "super-admin"
+      );
+
+      const normalAdmins = adminsData
+        .filter((a) => a.role !== "super-admin")
+        .sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        ); // newest first
+
+      setAdmins([...superAdmins, ...normalAdmins]);
     } catch (err) {
       console.error("Fetch error:", err);
     } finally {
@@ -28,7 +41,7 @@ const AdminList = () => {
     try {
       const token = localStorage.getItem("adminToken");
 
-      await axios.delete(`http://localhost:5000/api/admin/${id}`, {
+      await axios.delete(`/api/admin/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -52,7 +65,9 @@ const AdminList = () => {
       {loading ? (
         <p className="text-center py-8 text-[#6a4a2b]">Loading...</p>
       ) : admins.length === 0 ? (
-        <p className="text-center py-8 text-[#6a4a2b]">No admins found.</p>
+        <p className="text-center py-8 text-[#6a4a2b]">
+          No admins found.
+        </p>
       ) : (
         <div className="space-y-4 sm:space-y-5">
           {admins.map((admin) => (
@@ -66,10 +81,13 @@ const AdminList = () => {
                   {admin.name}
                 </h3>
 
-                <p className="text-sm text-[#6a4a2b] truncate">{admin.email}</p>
+                <p className="text-sm text-[#6a4a2b] truncate">
+                  {admin.email}
+                </p>
 
                 <p className="text-xs text-[#6a4a2b]/70 mt-1">
-                  Created: {new Date(admin.createdAt).toLocaleDateString()}
+                  Created:{" "}
+                  {new Date(admin.createdAt).toLocaleDateString()}
                 </p>
 
                 {/* ROLE BADGE */}

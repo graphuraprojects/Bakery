@@ -21,7 +21,7 @@ const Products = () => {
 
       const token = localStorage.getItem("adminToken");
 
-      const res = await axios.get("http://localhost:5000/api/admin/products", {
+      const res = await axios.get("/api/admin/products", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -39,18 +39,18 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  const handleSaveProduct = (newProduct) => {
-    if (!newProduct) return;
-    setProducts((prev) => [...prev, newProduct]);
-    toast.success("Product added successfully!");
-  };
+const handleSaveProduct = () => {
+  toast.success("Product added successfully!");
+  fetchProducts(); // ✅ always correct, fresh data
+};
+
 
   const handleDeleteProduct = async () => {
     try {
       const token = localStorage.getItem("adminToken");
 
       await axios.delete(
-        `http://localhost:5000/api/admin/product/${deleteProductId}`,
+        `/api/admin/product/${deleteProductId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

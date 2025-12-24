@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, selectCart } from "../redux/Slice";
 
-const API_BASE = "http://localhost:5000/api/product";
+const API_BASE = "/api/featured";
 
 /* ================= Animations ================= */
 const fadeUp = {
@@ -67,7 +67,7 @@ const FeaturedProducts = () => {
           image: product.images?.[0]
             ? product.images[0].startsWith("http")
               ? product.images[0]
-              : `http://localhost:5000${product.images[0]}`
+              : `${product.images[0]}`
             : "",
           qty: 1,
         })
@@ -134,7 +134,7 @@ const FeaturedProducts = () => {
                 item.images?.[0]
                   ? item.images[0].startsWith("http")
                     ? item.images[0]
-                    : `http://localhost:5000${item.images[0]}`
+                    : `${item.images[0]}`
                   : "https://via.placeholder.com/400x400?text=No+Image"
               }
               alt={item.name}

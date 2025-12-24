@@ -367,7 +367,7 @@ const OrderNow = () => {
 
       // First create order in backend using create-simple endpoint
       const orderRes = await fetch(
-        "http://localhost:5000/api/orders/create-simple",
+        "/api/orders/create-simple",
         {
           method: "POST",
           headers: {
@@ -456,7 +456,7 @@ const OrderNow = () => {
 
           try {
             const verifyRes = await fetch(
-              "http://localhost:5000/api/orders/verify-payment",
+              "/api/orders/verify-payment",
               {
                 method: "POST",
                 headers: {

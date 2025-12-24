@@ -158,7 +158,7 @@ const CustomCakeBuilder = () => {
   const fetchCategory = async (category, setter, staticData) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/customizations/${category.toLowerCase()}`
+        `/api/customizations/${category.toLowerCase()}`
       );
       if (res.data?.success && res.data.data.length > 0) {
         // Add price to options if not present
@@ -189,7 +189,7 @@ const CustomCakeBuilder = () => {
         // Try to fetch base cakes from API
         try {
           const baseRes = await axios.get(
-            "http://localhost:5000/api/customizations/base-cakes"
+            "/api/customizations/base-cakes"
           );
           if (baseRes.data?.success && baseRes.data.data.length > 0) {
             setBaseCakes(baseRes.data.data);

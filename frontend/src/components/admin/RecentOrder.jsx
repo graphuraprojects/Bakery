@@ -9,7 +9,7 @@ const RecentOrder = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/orders", {
+        const res = await axios.get("/api/admin/orders", {
           withCredentials: true, // if admin auth uses cookies
           headers: {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`, // if using JWT

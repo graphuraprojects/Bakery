@@ -1,53 +1,64 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getAllProducts,
-  getProduct,
-} = require("../controllers/productController");
-
 const adminMiddleware = require("../middlewares/adminMiddleware");
 const {
   uploadMemory,
   handleCloudinaryUpload,
 } = require("../middlewares/uploadMiddleware");
 
-/* =====================================================
-   PUBLIC ROUTES
-===================================================== */
+const productController = require("../controllers/productController");
 
-// GET ALL PRODUCTS
-router.get("/", getAllProducts);
+/* PUBLIC */
+router.get("/product", productController.getAllProducts);
+router.get("/product/single/:id", productController.getProduct);
 
-// GET SINGLE PRODUCT
-router.get("/single/:id", getProduct);
+/* FEATURED (BOTH PATHS SUPPORTED) */
+router.get("/featured", productController.getFeaturedProducts);
+router.get("/product/featured", productController.getFeaturedProducts);
 
-/* =====================================================
-   ADMIN ROUTES - WITH CLOUDINARY
-===================================================== */
-
-// CREATE PRODUCT (Cloudinary + local fallback)
+/* ADMIN */
 router.post(
-  "/create",
+  "/product/create",
   adminMiddleware,
   uploadMemory.array("images", 5),
   handleCloudinaryUpload,
-  createProduct
+  productController.createProduct
 );
 
-// UPDATE PRODUCT (Cloudinary + local fallback)
 router.put(
-  "/update/:id",
+  "/product/update/:id",
   adminMiddleware,
   uploadMemory.array("images", 5),
   handleCloudinaryUpload,
-  updateProduct
+  productController.updateProduct
 );
 
-// DELETE PRODUCT
-router.delete("/delete/:id", adminMiddleware, deleteProduct);
+router.delete(
+  "/product/delete/:id",
+  adminMiddleware,
+  productController.deleteProduct
+);
+
+router.get("/product/options", (req, res) => {
+  res.json({
+    success: true,
+    categories: [
+      "Cakes",
+      "Desserts",
+      "Pastries",
+      "Custom Cakes",
+      "Cupcakes",
+    ],
+    flavours: [
+      "Vanilla",
+      "Chocolate",
+      "Strawberry",
+      "Mango",
+      "Butterscotch",
+    ],
+    weights: ["500g", "1kg", "2kg"],
+  });
+});
 
 module.exports = router;

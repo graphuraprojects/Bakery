@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 
+import { getImageUrl } from "../../utils/getImageUrl";
+
 export default function Profile() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [user, setUser] = useState(null);
@@ -17,6 +19,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+const adminToken = localStorage.getItem("adminToken");
+
 
   const navigate = useNavigate();
 
@@ -227,7 +231,7 @@ export default function Profile() {
     const token = localStorage.getItem("userToken");
 
     axios
-      .get("http://localhost:5000/api/auth/me", {
+      .get("/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setUser(res.data.user))
@@ -253,14 +257,14 @@ export default function Profile() {
         );
 
         // First, let's check if the user exists
-        const userRes = await axios.get("http://localhost:5000/api/auth/me", {
+        const userRes = await axios.get("/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("📦 User ID from /api/auth/me:", userRes.data.user?._id);
 
         // Now fetch orders
         const response = await axios.get(
-          "http://localhost:5000/api/orders/my",
+          "/api/orders/my",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -294,7 +298,7 @@ export default function Profile() {
     const token = localStorage.getItem("userToken");
 
     try {
-      await axios.delete("http://localhost:5000/api/user/delete-account", {
+      await axios.delete("/api/user/delete-account", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -378,7 +382,7 @@ export default function Profile() {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/orders/cancel/${orderId}`,
+        `/api/orders/cancel/${orderId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -468,8 +472,9 @@ export default function Profile() {
                     <div
                       className="bg-center bg-cover bg-no-repeat rounded-full size-12 border"
                       style={{
-                        backgroundImage: `url("${user.profilePicture}")`,
-                      }}
+  backgroundImage: `url("${getImageUrl(user.profilePicture)}")`,
+}}
+
                     ></div>
                   ) : (
                     <div className="size-12 rounded-full bg-orange-500 text-white flex items-center justify-center text-lg font-bold">
@@ -499,19 +504,56 @@ export default function Profile() {
                   </a>
 
                   <button className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-orange-200/30">
-                    Setting
-                  </button>
+  Setting
+</button>
+
+{/* ✅ ADMIN DASHBOARD LINK (ADMIN ONLY) */}
+{adminToken && (
+  <button
+    onClick={() => navigate("/admin/dashboard")}
+    className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-orange-200/30 text-red-600 font-semibold"
+  >
+    Admin Dashboard
+  </button>
+)}
+
                 </div>
               </div>
 
               {/* LOGOUT AND DELETE ACCOUNT*/}
               <div className="flex gap-2">
                 <button
-                  onClick={() => setShowLogoutModal(true)}
-                  className="w-full bg-[#FFEFDC] text-[#FF6900] py-2 rounded-lg font-medium hover:bg-[#fbe3c5]"
-                >
-                  Logout
-                </button>
+  onClick={async () => {
+    try {
+      await axios.post("http://localhost:5000/api/auth/logout");
+
+      // Remove user tokens
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userInfo");
+
+      // Remove admin/super-admin tokens
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminInfo");
+
+      // Remove common tokens
+      localStorage.removeItem("token");
+      localStorage.removeItem("authToken");
+
+      // Trigger storage event to sync Navbar
+      window.dispatchEvent(new Event("storage"));
+
+      // Redirect to home
+      window.location.href = "/home";
+    } catch (error) {
+      console.error("Logout Error:", error);
+      toast.error("Logout failed, try again!");
+    }
+  }}
+  className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+>
+  Logout
+</button>
+
                 <button
                   onClick={() => setShowDeletePopup(true)}
                   className="w-full bg-red-600 text-white py-2 px-2 rounded-lg font-medium hover:bg-red-700"
@@ -532,10 +574,11 @@ export default function Profile() {
               <div className="flex items-center gap-6 mb-6">
                 {hasProfilePic ? (
                   <img
-                    src={user.profilePicture}
-                    className="w-28 h-28 rounded-full object-cover border"
-                    alt="profile"
-                  />
+  src={getImageUrl(user.profilePicture)}
+  className="w-28 h-28 rounded-full object-cover border"
+  alt="profile"
+/>
+
                 ) : (
                   <div className="w-28 h-28 rounded-full bg-orange-500 text-white flex items-center justify-center text-4xl font-bold">
                     {initial}
@@ -592,16 +635,20 @@ export default function Profile() {
               </div>
 
               {/* EDIT PROFILE BUTTON */}
-              <div className="flex justify-end mt-6">
-                <Link to="/edit-profile">
-                  <button
-                    className="px-6 py-2 rounded-lg text-white font-semibold bg-[#dfa26d] hover:bg-[#c98f5f] transition"
-                    type="button"
-                  >
-                    Edit Profile
-                  </button>
-                </Link>
-              </div>
+              {/* EDIT PROFILE BUTTON (ONLY FOR USER) */}
+{!adminToken && (
+  <div className="flex justify-end mt-6">
+    <Link to="/edit-profile">
+      <button
+        className="px-6 py-2 rounded-lg text-white font-semibold bg-[#dfa26d] hover:bg-[#c98f5f] transition"
+        type="button"
+      >
+        Edit Profile
+      </button>
+    </Link>
+  </div>
+)}
+
             </div>
 
             {/* ORDER HISTORY */}
@@ -621,7 +668,7 @@ export default function Profile() {
                     const token = localStorage.getItem("userToken");
                     try {
                       const response = await axios.get(
-                        "http://localhost:5000/api/orders/my",
+                        "/api/orders/my",
                         {
                           headers: { Authorization: `Bearer ${token}` },
                         }
@@ -887,7 +934,7 @@ export default function Profile() {
                     onClick={async () => {
                       try {
                         await axios.post(
-                          "http://localhost:5000/api/auth/logout"
+                          "/api/auth/logout"
                         );
 
                         localStorage.removeItem("userToken");

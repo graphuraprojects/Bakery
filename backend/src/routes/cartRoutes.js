@@ -13,10 +13,10 @@ const {
   clearCart,
 } = require("../controllers/cartController");
 
-router.get("/", authMiddleware, getCart);
-router.post("/add", authMiddleware, addToCart);
-router.put("/update/:productId", authMiddleware, updateCartItem);
-router.delete("/remove/:productId", authMiddleware, removeFromCart);
-router.delete("/clear", authMiddleware, clearCart);
+router.get("/cart", authMiddleware, getCart);
+router.post("/cart/add", authMiddleware, addToCart);
+router.put("/cart/update/:productId", authMiddleware, updateCartItem);
+router.delete("/cart/remove/:productId", authMiddleware, removeFromCart);
+router.delete("/cart/clear", authMiddleware, clearCart);
 
 module.exports = router;

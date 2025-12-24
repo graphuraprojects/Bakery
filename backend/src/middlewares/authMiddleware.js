@@ -3,15 +3,18 @@ const User = require("../models/User");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    console.log("🔐 Auth Header:", authHeader);
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
         message: "No token provided",
       });
     }
 
+    const token = authHeader.replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findById(decoded.id).select("-password");
@@ -23,20 +26,17 @@ const authMiddleware = async (req, res, next) => {
     }
 
     req.user = user;
+    console.log("✅ Authenticated User:", user._id);
+
     next();
   } catch (error) {
-    console.error("Auth middleware error:", error.message);
+    console.error("❌ Auth middleware error:", error.message);
+
     return res.status(401).json({
       success: false,
-      message: "Invalid token",
-      error: error.message,
+      message: "Invalid or expired token",
     });
   }
-  console.log("🔐 Auth Middleware - Checking token");
-  console.log("Authorization header:", req.headers.authorization);
-  console.log("Token:", req.headers.authorization?.replace("Bearer ", ""));
-  console.log("User from token:", req.user);
 };
-// In your authMiddleware.js
 
 module.exports = authMiddleware;

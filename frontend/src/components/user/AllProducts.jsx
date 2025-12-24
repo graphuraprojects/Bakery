@@ -20,7 +20,7 @@ export default function AllProducts() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/product/products",
+          "/api/product/products",
           {
             params: filters,
           }

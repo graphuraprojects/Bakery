@@ -52,7 +52,7 @@ const SetUsername = () => {
       console.log("🔄 Setting username for:", userInfo.email);
 
       const res = await axios.post(
-        `http://localhost:5000/api/auth/set-username`,
+        `/api/auth/set-username`,
         payload
       );
 

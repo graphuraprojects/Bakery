@@ -176,7 +176,7 @@ const Orders = () => {
       const token = localStorage.getItem("adminToken");
 
       const response = await axios.delete(
-        `http://localhost:5000/api/admin/orders/${orderId}`,
+        `/api/admin/orders/${orderId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

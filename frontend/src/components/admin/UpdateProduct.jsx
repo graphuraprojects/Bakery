@@ -30,10 +30,10 @@ export default function UpdateProductModal({ productId, onClose }) {
     const fetchProductAndOptions = async () => {
       try {
         const [productRes, allProductsRes] = await Promise.all([
-          axios.get(`http://localhost:5000/api/product/single/${productId}`, {
+          axios.get(`/api/product/single/${productId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get(`http://localhost:5000/api/product`),
+          axios.get(`/api/product`),
         ]);
 
         // Load product data with fallbacks for undefined values
@@ -130,7 +130,7 @@ export default function UpdateProductModal({ productId, onClose }) {
       console.log("📤 Tags type:", typeof updateData.tags);
 
       const response = await axios.put(
-        `http://localhost:5000/api/product/update/${productId}`,
+        `/api/product/update/${productId}`,
         updateData,
         {
           headers: {

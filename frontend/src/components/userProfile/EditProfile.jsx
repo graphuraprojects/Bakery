@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 export default function EditProfile() {
   const [user, setUser] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -19,16 +21,12 @@ export default function EditProfile() {
     pincode: "",
   });
 
-  const [passwordForm, setPasswordForm] = useState({
-    oldPassword: "",
-    newPassword: "",
-  });
-
+  /* ================= FETCH USER ================= */
   useEffect(() => {
     const token = localStorage.getItem("userToken");
 
     axios
-      .get("http://localhost:5000/api/auth/me", {
+      .get("/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -45,46 +43,74 @@ export default function EditProfile() {
           pincode: u?.address?.pincode || "",
         });
       })
+      .catch(() => {
+        alert("Session expired, please login again");
+        navigate("/login");
+      })
       .finally(() => setLoading(false));
   }, []);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handlePasswordChange = (e) =>
-    setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) setPreviewImg(URL.createObjectURL(file));
+    if (file) {
+      setPreviewImg(URL.createObjectURL(file));
+      setImageFile(file);
+    }
   };
 
-  // -----------------------------
-  // SAVE PROFILE FUNCTION
-  // -----------------------------
+  /* ================= UPDATE PROFILE ================= */
   const handleUpdateProfile = async () => {
     const token = localStorage.getItem("userToken");
 
     try {
-      // Update basic profile info
-      await axios.put(
-        `http://localhost:5000/api/user/update-profile/${user._id}`,
+      let updatedUser = { ...user };
+
+      /* 1️⃣ Upload profile image (OPTIONAL) */
+      if (imageFile) {
+        const fd = new FormData();
+        fd.append("profilePic", imageFile);
+
+        const imgRes = await axios.put(
+          "/api/user/upload-profile-pic",
+          fd,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        updatedUser.profilePicture = imgRes.data.profilePicture;
+      }
+
+      /* 2️⃣ Update basic profile */
+      const profileRes = await axios.put(
+        `/api/user/update-profile/${user._id}`,
         {
           name: form.name,
           username: form.username,
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
-      // Update/Add phone
+      updatedUser = profileRes.data.user;
+
+      /* 3️⃣ Update phone */
       if (form.phone && form.phone !== user.phone) {
-        await axios.patch(
-          "http://localhost:5000/api/user/add-phone",
+        const phoneRes = await axios.patch(
+          "/api/user/add-phone",
           { phone: form.phone },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        updatedUser.phone = phoneRes.data.phone;
       }
 
+      /* 4️⃣ Address */
       const addressPayload = {
         street: form.street,
         city: form.city,
@@ -92,35 +118,45 @@ export default function EditProfile() {
         pincode: form.pincode,
       };
 
-      // Add or update address
-      if (!user.address) {
-        await axios.post(
-          "http://localhost:5000/api/user/add-address",
+      if (
+        !user.address ||
+        !user.address.street
+      ) {
+        const addrRes = await axios.post(
+          "/api/user/add-address",
           addressPayload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        updatedUser.address = addrRes.data.address;
       } else {
-        await axios.put(
-          "http://localhost:5000/api/user/update-address",
+        const addrRes = await axios.put(
+          "/api/user/update-address",
           addressPayload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        updatedUser.address = addrRes.data.address;
       }
 
-      alert("Profile Updated Successfully!");
+      /* 5️⃣ Sync everywhere */
+      localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      window.dispatchEvent(new Event("storage"));
+
+      alert("✅ Profile Updated Successfully!");
       navigate("/profile");
     } catch (err) {
-      console.error(err);
-      alert("Error updating profile");
+      console.error("❌ Update profile error:", err);
+      alert("❌ Something went wrong. Please try again.");
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="h-screen flex justify-center items-center text-xl">
         Loading...
       </div>
     );
+  }
 
   return (
     <div className="pt-20 bg-[#f8f7f6]">
@@ -131,12 +167,12 @@ export default function EditProfile() {
           </h2>
 
           {/* Profile Image */}
-          <div className="flex items-center gap-6 mb-8">
+          {/* <div className="flex items-center gap-6 mb-8">
             <div className="relative w-28 h-28">
               <img
                 src={
                   previewImg ||
-                  user?.profilePicture ||
+                  getImageUrl(user?.profilePicture) ||
                   "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                 }
                 className="w-full h-full rounded-full object-cover border"
@@ -153,9 +189,9 @@ export default function EditProfile() {
                 />
               </label>
             </div>
-          </div>
+          </div> */}
 
-          {/* Editable Form */}
+          {/* Form */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {[
               { label: "Full Name", name: "name" },
@@ -165,8 +201,8 @@ export default function EditProfile() {
               { label: "City", name: "city" },
               { label: "State", name: "state" },
               { label: "Pincode", name: "pincode" },
-            ].map((field, index) => (
-              <div key={index}>
+            ].map((field, i) => (
+              <div key={i}>
                 <label className="font-medium text-gray-700">
                   {field.label}
                 </label>

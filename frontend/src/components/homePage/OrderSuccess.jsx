@@ -262,7 +262,7 @@ const OrderSuccess = () => {
           try {
             const token = localStorage.getItem("token");
             const orderRes = await fetch(
-              `http://localhost:5000/api/orders/${dbOrderId}`,
+              `/api/orders/${dbOrderId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,

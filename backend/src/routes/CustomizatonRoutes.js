@@ -6,33 +6,33 @@ const protect = require("../middlewares/authMiddleware");
 const designUpload = require("../middlewares/designUploadMiddleware");
 
 // Public Routes
-router.get("/", customizationController.getAllCustomizations);
-router.get("/:category", customizationController.getCustomizationsByCategory);
-router.get("/base-cakes", customizationController.getBaseCakes);
+router.get("/customizations", customizationController.getAllCustomizations);
+router.get("/customizations/:category", customizationController.getCustomizationsByCategory);
+router.get("/customizations/base-cakes", customizationController.getBaseCakes);
 router.post(
-  "/custom-cake/calculate-price",
+  "/customizations/custom-cake/calculate-price",
   customizationController.calculateCustomCakePrice
 );
 
 // Protected User Routes
 router.post(
-  "/custom-cake/order",
+  "/customizations/custom-cake/order",
   protect,
   customizationController.createCustomCakeOrder
 );
 router.get(
-  "/custom-cake/orders",
+  "/customizations/custom-cake/orders",
   protect,
   customizationController.getUserCustomCakeOrders
 );
 router.get(
-  "/custom-cake/orders/:orderId",
+  "/customizations/custom-cake/orders/:orderId",
   protect,
   customizationController.getCustomCakeOrderById
 );
 
 router.post(
-  "/custom-cake/upload-design/:orderId",
+  "/customizations/custom-cake/upload-design/:orderId",
   protect,
   designUpload.single("designImage"),
   customizationController.uploadCustomerDesign

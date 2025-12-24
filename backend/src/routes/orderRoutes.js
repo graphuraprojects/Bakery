@@ -17,16 +17,16 @@ const authMiddleware = require("../middlewares/authMiddleware");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 
 // USER ROUTES
-router.post("/create", authMiddleware, createOrder);
-router.post("/create-simple", authMiddleware, createSimpleOrder);
-router.post("/verify-payment", verifyPayment);
-router.get("/my", authMiddleware, getMyOrders);
-router.get("/:id", authMiddleware, getOrderById);
-router.put("/cancel/:id", authMiddleware, cancelOrder);
+router.post("/orders/create", authMiddleware, createOrder);
+router.post("/orders/create-simple", authMiddleware, createSimpleOrder);
+router.post("/orders/verify-payment", verifyPayment);
+router.get("/orders/my", authMiddleware, getMyOrders);
+router.get("/orders/:id", authMiddleware, getOrderById);
+router.put("/orders/cancel/:id", authMiddleware, cancelOrder);
 
 // ADMIN ROUTES
-router.get("/admin/all", authMiddleware, adminMiddleware, getAllOrders);
-router.get("/admin/stats", authMiddleware, adminMiddleware, getOrderStats);
-router.put("/admin/status/:id", authMiddleware, adminMiddleware, updateOrderStatus);
+router.get("/orders/admin/all", authMiddleware, adminMiddleware, getAllOrders);
+router.get("/orders/admin/stats", authMiddleware, adminMiddleware, getOrderStats);
+router.put("/orders/admin/status/:id", authMiddleware, adminMiddleware, updateOrderStatus);
 
 module.exports = router;

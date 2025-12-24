@@ -54,6 +54,8 @@ import CreateAdmin from "./components/admin/CreateAdmin";
 import AdminList from "./components/admin/AdminList";
 import AllUsers from "./components/admin/AllUsers";
 import ScrollToTop from "./components/ScrollToTop";
+import SuperAdminRegister from "./components/admin/SuperAdminRegister";
+import ProtectedSuperAdmin from "./components/admin/ProtectedSuperAdmin";
 
 export default function App() {
   return (
@@ -294,8 +296,23 @@ export default function App() {
           <Route path="offers" element={<OffersPage />} />
           <Route path="delivery" element={<Delivery />} />
           <Route path="customer-detail" element={<Customers />} />
-          <Route path="create-admin" element={<CreateAdmin />} />
-          <Route path="all-admins" element={<AdminList />} />
+          <Route
+  path="create-admin"
+  element={
+   
+      <CreateAdmin />
+    
+  }
+/>
+
+<Route
+  path="all-admins"
+  element={
+    
+      <AdminList />
+   
+  }
+/>
           <Route path="all-users" element={<AllUsers />} />
         </Route>
 
@@ -310,6 +327,24 @@ export default function App() {
             </MainLayout>
           }
         />
+        {/* ====================== SUPER ADMIN REGISTER ====================== */}
+<Route
+  path="/super-admin/register"
+  element={
+    <AuthLayout>
+      <SuperAdminRegister />
+    </AuthLayout>
+  }
+/>
+<Route
+  path="/forgot-password"
+  element={
+    <AuthLayout>
+      <ForgetPassword />
+    </AuthLayout>
+  }
+/>
+
       </Routes>
 
       {/* Debug Info - only show in development mode */}

@@ -14,31 +14,36 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/homePage/logo White.png";
 
 const SideBar = ({ closeSidebar }) => {
+  const adminInfo = JSON.parse(localStorage.getItem("adminInfo"));
+const adminRole = adminInfo?.role;
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
-  const menus = [
-    { name: "Dashboard", icon: <Home size={22} />, path: "/admin/dashboard" },
-    { name: "Orders", icon: <ShoppingBag size={22} />, path: "/admin/orders" },
-    { name: "Products", icon: <Boxes size={22} />, path: "/admin/products" },
-    // { name: "Delivery", icon: <Truck size={22} />, path: "/admin/delivery" },
-    { name: "Offers", icon: <Percent size={22} />, path: "/admin/offers" },
-    {
-      name: "Create Admin",
-      icon: <User2 size={22} />,
-      path: "/admin/create-admin",
-    },
-    {
-      name: "All Admins",
-      icon: <Users2 size={22} />,
-      path: "/admin/all-admins",
-    },
-    {
-      name: "All Users",
-      icon: <Users2 size={22} />,
-      path: "/admin/all-users",
-    },
-  ];
+const menus = [
+  { name: "Dashboard", icon: <Home size={22} />, path: "/admin/dashboard" },
+  { name: "Orders", icon: <ShoppingBag size={22} />, path: "/admin/orders" },
+  { name: "Products", icon: <Boxes size={22} />, path: "/admin/products" },
+
+  // 🔐 SUPER ADMIN ONLY
+  ...(adminRole === "super-admin"
+    ? [
+        {
+          name: "Create Admin",
+          icon: <User2 size={22} />,
+          path: "/admin/create-admin",
+        },
+        {
+          name: "All Admins",
+          icon: <Users2 size={22} />,
+          path: "/admin/all-admins",
+        },
+      ]
+    : []),
+
+  { name: "All Users", icon: <Users2 size={22} />, path: "/admin/all-users" },
+];
+
 
   const isActive = (path) => location.pathname === path;
 

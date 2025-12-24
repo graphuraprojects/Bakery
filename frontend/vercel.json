@@ -1,9 +1,13 @@
+
 {
-  "redirects": [
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://bakery-g3hv.onrender.com/api/$1"
+    },
     {
       "source": "/(.*)",
-      "destination": "https://bakery-g3hv.onrender.com/$1",
-      "permanent": true
+      "destination": "/"
     }
   ]
 }

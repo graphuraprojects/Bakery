@@ -3,7 +3,7 @@ const sendContactMail = require("../utils/sendContactMail");
 
 const router = express.Router();
 
-router.post("/contact-us", async (req, res) => {
+router.post("/contact/contact-us", async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
