@@ -43,7 +43,18 @@ exports.adminLogin = async (req, res) => {
     const isMatch = await admin.comparePassword(password);
     if (!isMatch) return res.status(400).json({ message: "Incorrect password" });
 
-    const token = admin.generateToken();
+    const token = JWT.sign(
+      { id: admin._id, role: admin.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("adminToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
     res.json({
       success: true,
