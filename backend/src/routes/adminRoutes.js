@@ -7,12 +7,22 @@ const {
 const adminAuth = require("../middlewares/adminMiddleware");
 const superAdminAuth = require("../middlewares/superAdminAuth");
 
-
 const adminController = require("../controllers/adminController");
 
 /* ===== AUTH ===== */
 router.post("/admin/super-admin/register", adminController.registerSuperAdmin);
 router.post("/admin/login", adminController.adminLogin);
+
+/* ===== ADMIN PROFILE ===== */
+router.get("/admin/me", adminAuth, adminController.getAdminProfile);
+router.put("/admin/update-profile/:id", adminAuth, adminController.updateAdminProfile);
+router.put(
+  "/admin/upload-profile-pic",
+  adminAuth,
+  uploadMemory.single("profilePic"),
+  handleCloudinaryUpload,
+  adminController.uploadAdminProfilePic
+);
 
 /* ===== ADMIN MANAGEMENT ===== */
 router.post("/admin/create", superAdminAuth, adminController.createAdmin);
@@ -21,14 +31,11 @@ router.delete("/admin/:id", superAdminAuth, adminController.deleteAdmin);
 
 /* ===== PRODUCTS ===== */
 router.get("/admin/products", adminAuth, adminController.getAdminProducts);
-
-
-
 router.post(
   "/admin/product",
   adminAuth,
   uploadMemory.array("images", 10),
-  handleCloudinaryUpload,          // ✅ ADD THIS
+  handleCloudinaryUpload,
   adminController.createProduct
 );
 router.put("/admin/product/:id", adminAuth, adminController.updateProduct);
@@ -36,34 +43,28 @@ router.delete("/admin/product/:id", adminAuth, adminController.deleteProduct);
 
 /* ===== USERS ===== */
 router.get("/admin/users", adminAuth, adminController.getUsers);
-router.delete("/user/:id", adminAuth, adminController.deleteUser);
-
-/* ===== ORDERS ===== */
-router.get("/admin/orders", adminAuth, adminController.getOrders);
-/* ===== ORDER STATUS UPDATE ===== */
-router.put(
-  "/admin/orders/:id/status",
-  adminAuth,
-  adminController.updateOrderStatus
-);
-
-/* ===== DELETE ORDER ===== */
-router.delete(
-  "/admin/orders/:id",
-  adminAuth,
-  adminController.deleteOrder
-);
-/* ===== BLOCK / UNBLOCK USER ===== */
 router.patch(
   "/admin/user/block/:id",
   adminAuth,
   adminController.blockUnblockUser
 );
-/* ===== DELETE USER (ADMIN PATH) ===== */
 router.delete(
   "/admin/user/:id",
   adminAuth,
   adminController.deleteUser
+);
+
+/* ===== ORDERS ===== */
+router.get("/admin/orders", adminAuth, adminController.getOrders);
+router.put(
+  "/admin/orders/:id/status",
+  adminAuth,
+  adminController.updateOrderStatus
+);
+router.delete(
+  "/admin/orders/:id",
+  adminAuth,
+  adminController.deleteOrder
 );
 
 module.exports = router;

@@ -91,261 +91,268 @@ export default function App() {
 
       {/* Wrap Routes with ErrorBoundary for global error handling */}
 
-        <ScrollToTop />
-      <Routes>
-        {/* ====================== DEFAULT ====================== */}
-        <Route path="/" element={<Navigate to="/home" />} />
+      <ScrollToTop />
+  
+        <Routes>
+          {/* ====================== DEFAULT ====================== */}
+          <Route path="/" element={<Navigate to="/home" />} />
 
-        {/* ====================== PUBLIC PAGES ====================== */}
-        <Route
-          path="/home"
-          element={
-            <MainLayout>
-              <Homepage />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/about"
-          element={
-            <MainLayout>
-              <About />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/contact-us"
-          element={
-            <MainLayout>
-              <ContactUs />
-            </MainLayout>
-          }
-        />
-
-        {/* ====================== USER AUTH ====================== */}
-        <Route
-          path="/register"
-          element={
-            <AuthLayout>
-              <Register />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/login"
-          element={
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/verify-otp"
-          element={
-            <AuthLayout>
-              <VerifyOTP />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/set-username"
-          element={
-            <AuthLayout>
-              <SetUsername />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/forget-password"
-          element={
-            <AuthLayout>
-              <ForgetPassword />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/reset-password"
-          element={
-            <AuthLayout>
-              <ResetPassword />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/otp-verify"
-          element={
-            <AuthLayout>
-              <VerifyForgetPasswordOTP />
-            </AuthLayout>
-          }
-        />
-
-        {/* ====================== USER PROFILE ====================== */}
-        <Route
-          path="/profile"
-          element={
-            <AuthLayout>
-              <Profile />
-            </AuthLayout>
-          }
-        />
-
-        <Route
-          path="/edit-profile"
-          element={
-            <MainLayout>
-              <EditProfile />
-            </MainLayout>
-          }
-        />
-
-        {/* ====================== MENU & FILTERING ====================== */}
-        <Route
-          path="/menu"
-          element={
-            <MainLayout>
-              <FilterPage />
-            </MainLayout>
-          }
-        />
-
-        {/* ====================== USER PRODUCTS ====================== */}
-        <Route
-          path="/products"
-          element={
-            <MainLayout>
-              <AllProducts />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/product/:id"
-          element={
-            <MainLayout>
-              <ProductDetails />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/customize"
-          element={
-            <MainLayout>
-              <CustomCakeBuilder />
-            </MainLayout>
-          }
-        />
-
-        {/* ====================== CART & CHECKOUT ====================== */}
-        <Route
-          path="/cart"
-          element={
-            <MainLayout>
-              <Cart />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/order"
-          element={
-            <ProtectedRoutes>
-              <MainLayout>
-                <OrderNow />
-              </MainLayout>
-            </ProtectedRoutes>
-          }
-        />
-
-        <Route
-          path="/order-success"
-          element={
-            <ProtectedRoutes>
-              <MainLayout>
-                <OrderSuccess />
-              </MainLayout>
-            </ProtectedRoutes>
-          }
-        />
-
-        {/* ====================== ADMIN LOGIN ONLY ====================== */}
-        <Route
-          path="/admin-login"
-          element={
-            <AuthLayout>
-              <AdminLogin />
-            </AuthLayout>
-          }
-        />
-
-        {/* ====================== ADMIN DASHBOARD ====================== */}
-        <Route path="/admin" element={<DashboardLayout />}>
-          <Route path="dashboard" element={<DashboardHome />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="products" element={<Products />} />
-          <Route path="products/create" element={<CreateProduct />} />
-          <Route path="products/update/:id" element={<UpdateProduct />} />
-          <Route path="offers" element={<OffersPage />} />
-          <Route path="delivery" element={<Delivery />} />
-          <Route path="customer-detail" element={<Customers />} />
+          {/* ====================== PUBLIC PAGES ====================== */}
           <Route
-  path="create-admin"
-  element={
-   
-      <CreateAdmin />
+            path="/home"
+            element={
+              <MainLayout>
+                <Homepage />
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/about"
+            element={
+              <MainLayout>
+                <About />
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/contact-us"
+            element={
+              <MainLayout>
+                <ContactUs />
+              </MainLayout>
+            }
+          />
+
+          {/* ====================== USER AUTH ====================== */}
+          <Route
+            path="/register"
+            element={
+              <AuthLayout>
+                <Register />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/verify-otp"
+            element={
+              <AuthLayout>
+                <VerifyOTP />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/set-username"
+            element={
+              <AuthLayout>
+                <SetUsername />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/forget-password"
+            element={
+              <AuthLayout>
+                <ForgetPassword />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/reset-password"
+            element={
+              <AuthLayout>
+                <ResetPassword />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/otp-verify"
+            element={
+              <AuthLayout>
+                <VerifyForgetPasswordOTP />
+              </AuthLayout>
+            }
+          />
+
+          {/* ====================== USER PROFILE ====================== */}
+          <Route
+            path="/profile"
+            element={
+              <AuthLayout>
+                <Profile />
+              </AuthLayout>
+            }
+          />
+
+          <Route
+            path="/edit-profile"
+            element={
+              <MainLayout>
+                <EditProfile />
+              </MainLayout>
+            }
+          />
+
+          {/* ====================== ADMIN EDIT PROFILE (ADDED THIS ROUTE) ====================== */}
+          <Route
+            path="/admin/edit-profile"
+            element={
+              <MainLayout>
+                <EditProfile />
+              </MainLayout>
+            }
+          />
+
+          {/* ====================== MENU & FILTERING ====================== */}
+          <Route
+            path="/menu"
+            element={
+              <MainLayout>
+                <FilterPage />
+              </MainLayout>
+            }
+          />
+
+          {/* ====================== USER PRODUCTS ====================== */}
+          <Route
+            path="/products"
+            element={
+              <MainLayout>
+                <AllProducts />
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/product/:id"
+            element={
+              <MainLayout>
+                <ProductDetails />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/customize"
+            element={
+              <MainLayout>
+                <CustomCakeBuilder />
+              </MainLayout>
+            }
+          />
+
+          {/* ====================== CART & CHECKOUT ====================== */}
+          <Route
+            path="/cart"
+            element={
+              <MainLayout>
+                <Cart />
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/order"
+            element={
+              <ProtectedRoutes>
+                <MainLayout>
+                  <OrderNow />
+                </MainLayout>
+              </ProtectedRoutes>
+            }
+          />
+
+          <Route
+            path="/order-success"
+            element={
+              <ProtectedRoutes>
+                <MainLayout>
+                  <OrderSuccess />
+                </MainLayout>
+              </ProtectedRoutes>
+            }
+          />
+
+          {/* ====================== ADMIN LOGIN ONLY ====================== */}
+          <Route
+            path="/admin-login"
+            element={
+              <AuthLayout>
+                <AdminLogin />
+              </AuthLayout>
+            }
+          />
+
+          {/* ====================== ADMIN DASHBOARD ====================== */}
+          <Route path="/admin" element={<DashboardLayout />}>
+            <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="products" element={<Products />} />
+            <Route path="products/create" element={<CreateProduct />} />
+            <Route path="products/update/:id" element={<UpdateProduct />} />
+            <Route path="offers" element={<OffersPage />} />
+            <Route path="delivery" element={<Delivery />} />
+            <Route path="customer-detail" element={<Customers />} />
+            <Route
+              path="create-admin"
+              element={
+                <CreateAdmin />
+              }
+            />
+
+            <Route
+              path="all-admins"
+              element={
+                <AdminList />
+              }
+            />
+            <Route path="all-users" element={<AllUsers />} />
+          </Route>
+
+          {/* ====================== 404 ====================== */}
+          <Route
+            path="*"
+            element={
+              <MainLayout>
+                <h1 className="text-3xl text-center mt-20">
+                  404 — Page Not Found
+                </h1>
+              </MainLayout>
+            }
+          />
+          {/* ====================== SUPER ADMIN REGISTER ====================== */}
+          <Route
+            path="/super-admin/register"
+            element={
+              <AuthLayout>
+                <SuperAdminRegister />
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <AuthLayout>
+                <ForgetPassword />
+              </AuthLayout>
+            }
+          />
+        </Routes>
     
-  }
-/>
-
-<Route
-  path="all-admins"
-  element={
-    
-      <AdminList />
-   
-  }
-/>
-          <Route path="all-users" element={<AllUsers />} />
-        </Route>
-
-        {/* ====================== 404 ====================== */}
-        <Route
-          path="*"
-          element={
-            <MainLayout>
-              <h1 className="text-3xl text-center mt-20">
-                404 — Page Not Found
-              </h1>
-            </MainLayout>
-          }
-        />
-        {/* ====================== SUPER ADMIN REGISTER ====================== */}
-<Route
-  path="/super-admin/register"
-  element={
-    <AuthLayout>
-      <SuperAdminRegister />
-    </AuthLayout>
-  }
-/>
-<Route
-  path="/forgot-password"
-  element={
-    <AuthLayout>
-      <ForgetPassword />
-    </AuthLayout>
-  }
-/>
-
-      </Routes>
 
       {/* Debug Info - only show in development mode */}
     </>

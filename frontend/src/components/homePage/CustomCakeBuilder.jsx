@@ -961,18 +961,7 @@ const CustomCakeBuilder = () => {
               </div>
 
               {/* Help Text */}
-              <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200">
-                <h3 className="font-bold text-amber-800 mb-2">
-                  💡 How it works:
-                </h3>
-                <ul className="text-sm text-amber-700 space-y-1">
-                  <li>• Select options from each category</li>
-                  <li>• Price updates automatically</li>
-                  <li>• Add to cart when ready</li>
-                  <li>• Custom cakes take 2-3 days to prepare</li>
-                  <li>• Contact us for bulk orders</li>
-                </ul>
-              </div>
+         
             </div>
           </div>
         </div>

@@ -244,7 +244,7 @@ const Login = () => {
       {/* Switch Type Hint */}
       <div className="flex justify-between items-center">
         {/* Forgot Password */}
-{!isAdminLogin && (
+ 
   <div className="">
     <NavLink
       to="/forgot-password"
@@ -255,7 +255,6 @@ const Login = () => {
 
   </div>
   
-)}
 
         <button
           type="button"
@@ -295,15 +294,18 @@ const Login = () => {
       {/* <div className="mt-4 p-2 bg-gray-100 rounded text-xs text-gray-500">
         <p>Debug: Storing token as "token" and "userToken"</p>
       </div> */}
-          <p className="text-center text-sm text-gray-600 mt-3">
-  Don’t have an account?{" "}
-  <NavLink
-    to="/register"
-    className="text-[#c85a32] font-semibold hover:underline"
-  >
-    Register
-  </NavLink>
-</p>
+         {!isAdminLogin && (
+  <p className="text-center text-sm text-gray-600 mt-3">
+    Don’t have an account?{" "}
+    <NavLink
+      to="/register"
+      className="text-[#c85a32] font-semibold hover:underline"
+    >
+      Register
+    </NavLink>
+  </p>
+)}
+
     </form>
   );
 

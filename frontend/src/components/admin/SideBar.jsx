@@ -38,10 +38,12 @@ const menus = [
           icon: <Users2 size={22} />,
           path: "/admin/all-admins",
         },
+        
       ]
     : []),
 
   { name: "All Users", icon: <Users2 size={22} />, path: "/admin/all-users" },
+
 ];
 
 

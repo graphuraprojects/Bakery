@@ -4,7 +4,11 @@ const jwt = require("jsonwebtoken");
 
 const adminSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { 
+      type: String, 
+      required: true,
+      trim: true 
+    },
 
     email: {
       type: String,
@@ -18,6 +22,17 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
       select: false,
+    },
+
+    // Add these missing fields that EditProfile expects:
+    profilePicture: {
+      type: String,
+      default: ""
+    },
+
+    phone: {
+      type: String,
+      default: ""
     },
 
     // SUPER ADMIN or ADMIN

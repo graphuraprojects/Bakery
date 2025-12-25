@@ -273,6 +273,100 @@ exports.blockUnblockUser = async (req, res) => {
   }
 };
 
+/* ================= ADMIN PROFILE ================= */
+
+/* ================= ADMIN PROFILE ================= */
+
+exports.getAdminProfile = async (req, res) => {
+  try {
+    // Use req.admin._id instead of req.admin.id
+    const admin = await Admin.findById(req.admin._id).select("-password");
+    
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Admin not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      admin
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateAdminProfile = async (req, res) => {
+  try {
+    const { name, phone } = req.body;
+    
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (phone) updateData.phone = phone;
+
+    // Use req.admin._id here too
+    const admin = await Admin.findByIdAndUpdate(
+      req.admin._id, // Changed from req.admin.id
+      updateData,
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Admin not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      admin
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.uploadAdminProfilePic = async (req, res) => {
+  try {
+    // Use req.admin._id
+    const adminId = req.admin._id;
+    
+    if (!req.cloudinaryFiles || req.cloudinaryFiles.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No image uploaded"
+      });
+    }
+
+    const profilePicture = req.cloudinaryFiles[0];
+
+    const admin = await Admin.findByIdAndUpdate(
+      adminId,
+      { profilePicture },
+      { new: true }
+    ).select("-password");
+
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Admin not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Profile picture uploaded successfully",
+      profilePicture: admin.profilePicture
+    });
+  } catch (err) {
+    console.error("Upload profile pic error:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
 exports.deleteUser = async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.json({ success: true });

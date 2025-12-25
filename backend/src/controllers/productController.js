@@ -299,3 +299,19 @@ exports.getFeaturedProducts = async (req, res) => {
   }
 };
 
+// GET UNIQUE WEIGHTS FOR FILTER
+exports.getUniqueWeights = async (req, res) => {
+  try {
+    const weights = await Product.distinct("weight");
+
+    res.json({
+      success: true,
+      weights: weights.filter(Boolean), // null/empty hatao
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch weights",
+    });
+  }
+};

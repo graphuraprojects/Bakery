@@ -35,7 +35,8 @@ const getAuthRole = () => {
   const [categories, setCategories] = useState([]);
 
   const [flavors, setFlavors] = useState([]);
-  const [weights, setWeights] = useState([]);
+ const [weights, setWeights] = useState([]);
+
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [maxPrice, setMaxPrice] = useState(10000);
   const [loading, setLoading] = useState(true);
@@ -44,10 +45,20 @@ const getAuthRole = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showProductModal, setShowProductModal] = useState(false);
 
+
   // ⬇️⬇️⬇️
   // EVERYTHING BELOW THIS IS 100% YOUR ORIGINAL CODE
   // NOTHING ELSE TOUCHED
   // ⬇️⬇️⬇️
+// useEffect(() => {
+//   fetch("/api/product/weights")
+//     .then(res => res.json())
+//     .then(data => {
+//       if (data.success) {
+//         setWeights(data.weights);
+//       }
+//     });
+// }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -109,6 +120,20 @@ const getAuthRole = () => {
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+  if (!allProducts || allProducts.length === 0) return;
+
+  const uniqueWeights = [
+    ...new Set(
+      allProducts
+        .map((p) => p.weight)
+        .filter(Boolean)
+    ),
+  ];
+
+  setWeights(uniqueWeights);
+}, [allProducts]);
 
   // Apply filters and sorting
   useEffect(() => {
@@ -726,44 +751,46 @@ const handleBuyNow = (e, product) => {
               </div>
 
               {/* Weight Filter - Buttons */}
-              <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 mb-2.5">
-                  Weight (KG)
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => handleFilterChange("weight", "")}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      filters.weight === ""
-                        ? "bg-[#d78f52] text-white shadow-md"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
-                    }`}
-                  >
-                    All
-                  </button>
-                  {(weights.length > 0
-                    ? weights
-                    : ["120g", "130g", "150g", "1kg"]
-                  ).map((weight) => (
-                    <button
-                      key={weight}
-                      onClick={() =>
-                        handleFilterChange(
-                          "weight",
-                          filters.weight === weight ? "" : weight
-                        )
-                      }
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        filters.weight === weight
-                          ? "bg-[#d78f52] text-white shadow-md"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
-                      }`}
-                    >
-                      {weight}
-                    </button>
-                  ))}
-                </div>
-              </div>
+{/* WEIGHT FILTER */}
+<div className="mb-5">
+  <label className="block text-sm font-semibold text-gray-700 mb-2.5">
+    Weight
+  </label>
+
+  <div className="flex flex-wrap gap-2">
+    <button
+      onClick={() => handleFilterChange("weight", "")}
+      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+        filters.weight === ""
+          ? "bg-[#d78f52] text-white shadow-md"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+      }`}
+    >
+      All
+    </button>
+
+    {weights.map((weight) => (
+      <button
+        key={weight}
+        onClick={() =>
+          handleFilterChange(
+            "weight",
+            filters.weight === weight ? "" : weight
+          )
+        }
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+          filters.weight === weight
+            ? "bg-[#d78f52] text-white shadow-md"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+        }`}
+      >
+        {weight}
+      </button>
+    ))}
+  </div>
+</div>
+
+
 
               {/* Flavor Filter - Buttons */}
               <div className="mb-5">
