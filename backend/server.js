@@ -11,14 +11,17 @@ dotenv.config();
 const app = express();
 
 /* ===================== BASIC MIDDLEWARE ===================== */
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://bakery-website-jet.vercel.app"
-  ],
-  credentials: true
-}));
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://bakery-website-jet.vercel.app",
+      "https://bakery-website-qick6y1xl-vivek-kumars-projects-c1d529b0.vercel.app/",
+      "https://bakery-website-git-main-vivek-kumars-projects-c1d529b0.vercel.app/",
+    ],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -56,14 +59,14 @@ const productRoutes = require("./src/routes/productRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
 const cartRoutes = require("./src/routes/cartRoutes");
 const orderRoutes = require("./src/routes/orderRoutes");
-const contactRoutes = require("./src/routes/ContactRoutes")
+const contactRoutes = require("./src/routes/ContactRoutes");
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", productRoutes);
 app.use("/api", adminRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", orderRoutes);
-app.use("/api",contactRoutes)
+app.use("/api", contactRoutes);
 
 /* ===================== RAZORPAY ROUTES ===================== */
 app.post("/api/payment/create-order", async (req, res) => {
@@ -129,7 +132,6 @@ app.post("/api/payment/verify", async (req, res) => {
   }
 });
 
-
 /* ===================== ORDER ROUTES (FRONTEND COMPATIBLE) ===================== */
 
 // Create order (used by OrderNow.jsx)
@@ -144,10 +146,7 @@ app.post("/api/orders/create-simple", async (req, res) => {
       });
     }
 
-    const amount = items.reduce(
-      (sum, item) => sum + item.price * item.qty,
-      0
-    );
+    const amount = items.reduce((sum, item) => sum + item.price * item.qty, 0);
 
     const razorpayOrder = await razorpay.orders.create({
       amount: Math.round(amount * 100),
@@ -178,11 +177,8 @@ app.post("/api/orders/create-simple", async (req, res) => {
 // Verify payment (used by OrderNow.jsx)
 app.post("/api/orders/verify-payment", async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-    } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
