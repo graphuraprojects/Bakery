@@ -11,7 +11,18 @@ dotenv.config();
 const app = express();
 
 /* ===================== BASIC MIDDLEWARE ===================== */
-app.use(cors())
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://bakery-oa9j.vercel.app/",
+      "https://bakery-oa9j-git-main-graphura-india-pvt-ltds-projects.vercel.app/",
+      "https://bakery-oa9j-vboodczv7-graphura-india-pvt-ltds-projects.vercel.app/",
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
