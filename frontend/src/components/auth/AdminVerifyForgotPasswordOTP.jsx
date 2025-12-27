@@ -14,7 +14,9 @@ const AdminVerifyForgotPasswordOTP = () => {
     const storedEmail = localStorage.getItem("adminFpEmail");
 
     if (!storedEmail) {
-      setMessage("❌ No admin email found. Please restart password reset process.");
+      setMessage(
+        "❌ No admin email found. Please restart password reset process."
+      );
       navigate("/admin/forgot-password");
     } else {
       setEmail(storedEmail);
@@ -39,7 +41,8 @@ const AdminVerifyForgotPasswordOTP = () => {
       navigate("/admin/reset-password");
     } catch (err) {
       setMessage(
-        err.response?.data?.message || "❌ OTP verification failed. Please try again."
+        err.response?.data?.message ||
+          "❌ OTP verification failed. Please try again."
       );
     }
   };
@@ -74,7 +77,6 @@ const AdminVerifyForgotPasswordOTP = () => {
           <button
             type="submit"
             className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
-
           >
             Verify OTP
           </button>

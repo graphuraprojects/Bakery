@@ -12,10 +12,7 @@ function ForgetPassword() {
     setMessage("");
 
     try {
-      const res = await axios.post(
-        "/api/auth/forgot-password",
-        { email }
-      );
+      const res = await axios.post("/api/auth/forgot-password", { email });
 
       localStorage.setItem("fpEmail", email);
 
@@ -57,8 +54,7 @@ function ForgetPassword() {
           {/* Button */}
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white py-3 rounded-lg 
-            font-semibold text-lg shadow-md hover:bg-orange-600 transition-all"
+            className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
           >
             Send OTP
           </button>
@@ -66,7 +62,9 @@ function ForgetPassword() {
 
         {/* Message */}
         {message && (
-          <p className="text-center font-medium mt-4 text-gray-700">{message}</p>
+          <p className="text-center font-medium mt-4 text-gray-700">
+            {message}
+          </p>
         )}
       </div>
     </div>

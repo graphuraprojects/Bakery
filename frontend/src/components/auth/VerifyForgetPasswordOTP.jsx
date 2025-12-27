@@ -68,8 +68,8 @@ const VerifyForgetPasswordOTP = () => {
           {/* Verify Button */}
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white py-3 rounded-lg text-lg font-semibold
-            shadow-md hover:bg-orange-600 transition-all"
+            className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
+
           >
             Verify OTP
           </button>
