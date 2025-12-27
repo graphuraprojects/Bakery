@@ -3,16 +3,22 @@ const nodemailer = require("nodemailer");
 const sendContactMail = async ({ name, email, message }) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      tls: {
+        rejectUnauthorized: false,
+      },
+      connectionTimeout: 20000,
     });
 
     const mailOptions = {
-      from: `"Bakery Website" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // OWNER EMAIL
+      from: `"Bakery Website" <${process.env.FROM_EMAIL}>`,
+      to: process.env.FROM_EMAIL,
       subject: "📩 New Contact Message",
       html: `
         <div style="font-family:Arial; padding:20px;">

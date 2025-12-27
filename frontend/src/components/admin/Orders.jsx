@@ -77,12 +77,9 @@ const Orders = () => {
       setLoading(true);
       const token = localStorage.getItem("adminToken");
 
-      const response = await axios.get(
-        "/api/admin/orders",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get("/api/admin/orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.data.success) {
         setOrders(response.data.orders);
@@ -175,12 +172,9 @@ const Orders = () => {
     try {
       const token = localStorage.getItem("adminToken");
 
-      const response = await axios.delete(
-        `/api/admin/orders/${orderId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.delete(`/api/admin/orders/${orderId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.data.success) {
         toast.success("Order deleted successfully");
@@ -211,7 +205,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="p-6 lg:ml-64">
+    <div className="p-4 md:p-6 lg:ml-64 overflow-x-hidden">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-[#3f2e20] mb-2">
           Orders Management
@@ -220,54 +214,54 @@ const Orders = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Total Orders</p>
-              <p className="text-2xl font-bold text-[#3f2e20]">
+              <p className="text-xl md:text-2xl font-bold text-[#3f2e20]">
                 {orders.length}
               </p>
             </div>
-            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-              <span className="text-blue-600 text-xl">📦</span>
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-blue-600 text-lg md:text-xl">📦</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Pending Orders</p>
-              <p className="text-2xl font-bold text-yellow-600">
+              <p className="text-xl md:text-2xl font-bold text-yellow-600">
                 {pendingOrders}
               </p>
             </div>
-            <div className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
-              <span className="text-yellow-600 text-xl">⏳</span>
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-yellow-600 text-lg md:text-xl">⏳</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Total Revenue</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-xl md:text-2xl font-bold text-green-600">
                 ₹{totalRevenue.toFixed(2)}
               </p>
             </div>
-            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-              <span className="text-green-600 text-xl">💰</span>
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-green-600 text-lg md:text-xl">💰</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md border border-[#f1e5d8]">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Today's Orders</p>
-              <p className="text-2xl font-bold text-[#3f2e20]">
+              <p className="text-xl md:text-2xl font-bold text-[#3f2e20]">
                 {
                   orders.filter((order) => {
                     const today = new Date().toDateString();
@@ -277,28 +271,28 @@ const Orders = () => {
                 }
               </p>
             </div>
-            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-              <span className="text-purple-600 text-xl">📅</span>
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-purple-600 text-lg md:text-xl">📅</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Filter Buttons */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto pb-2">
         {statusOptions.map((status) => (
           <button
             key={status.value}
             onClick={() => setFilter(status.value)}
             className={`
-                            px-4 py-2 rounded-lg font-medium transition-all duration-200
-                            shadow-sm border text-sm
-                            ${
-                              filter === status.value
-                                ? "bg-[#d69e64] text-white border-transparent"
-                                : "bg-white text-[#3f2e20] border-[#d9c1aa] hover:bg-[#f7e8dc]"
-                            }
-                        `}
+              px-3 py-2 md:px-4 md:py-2 rounded-lg font-medium transition-all duration-200
+              shadow-sm border text-xs md:text-sm whitespace-nowrap flex-shrink-0
+              ${
+                filter === status.value
+                  ? "bg-[#d69e64] text-white border-transparent"
+                  : "bg-white text-[#3f2e20] border-[#d9c1aa] hover:bg-[#f7e8dc]"
+              }
+            `}
           >
             {status.label}
           </button>
@@ -306,21 +300,21 @@ const Orders = () => {
 
         <button
           onClick={fetchOrders}
-          className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
+          className="px-3 py-2 md:px-4 md:py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition flex items-center gap-2 text-xs md:text-sm whitespace-nowrap flex-shrink-0"
         >
-          <FaSync /> Refresh
+          <FaSync className="text-xs md:text-sm" /> Refresh
         </button>
       </div>
 
-      {/* Orders Table */}
-      <div className="bg-white p-6 rounded-2xl shadow-xl border border-[#f1e5d8] overflow-auto">
+      {/* Orders Table Container */}
+      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-xl border border-[#f1e5d8] overflow-hidden">
         {filteredOrders.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">📦</div>
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          <div className="text-center py-8 md:py-12">
+            <div className="text-gray-400 text-5xl md:text-6xl mb-4">📦</div>
+            <h3 className="text-lg md:text-xl font-semibold text-gray-700 mb-2">
               No Orders Found
             </h3>
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-sm md:text-base">
               {filter === "All"
                 ? "No orders have been placed yet."
                 : `No orders with status "${filter}" found.`}
@@ -328,31 +322,31 @@ const Orders = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-max">
+            <table className="w-full min-w-[1024px] md:min-w-full">
               <thead>
                 <tr className="bg-[#f7e8dc] text-[#3f2e20]">
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Order ID
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Customer
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Items
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Total Amount
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Status
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Payment
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Date
                   </th>
-                  <th className="py-3 px-4 text-left font-semibold text-sm">
+                  <th className="py-3 px-3 md:px-4 text-left font-semibold text-xs md:text-sm">
                     Actions
                   </th>
                 </tr>
@@ -363,25 +357,27 @@ const Orders = () => {
                     key={order._id}
                     className="border-b border-[#f1e5d8] hover:bg-[#fff7f1] transition-all"
                   >
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-sm">
+                    <td className="py-3 px-3 md:px-4">
+                      <div className="font-semibold text-xs md:text-sm">
                         #{order._id.toString().slice(-8).toUpperCase()}
                       </div>
                       <div className="text-xs text-gray-500">
                         {order.orderNumber || "N/A"}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="font-medium">
+                    <td className="py-3 px-3 md:px-4">
+                      <div className="font-medium text-xs md:text-sm">
                         {order.user?.name || "Customer"}
                       </div>
                       <div className="text-xs text-gray-500">
                         {order.user?.email || "N/A"}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="text-sm">{order.items.length} items</div>
-                      <div className="text-xs text-gray-500">
+                    <td className="py-3 px-3 md:px-4">
+                      <div className="text-xs md:text-sm">
+                        {order.items.length} items
+                      </div>
+                      <div className="text-xs text-gray-500 truncate max-w-[150px]">
                         {order.items
                           .slice(0, 2)
                           .map((item) => item.name)
@@ -389,45 +385,75 @@ const Orders = () => {
                         {order.items.length > 2 && "..."}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-[#3f2e20]">
+                    <td className="py-3 px-3 md:px-4">
+                      <div className="font-bold text-[#3f2e20] text-xs md:text-sm">
                         ₹{order.totalAmount.toFixed(2)}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-3 md:px-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center ${
+                        className={`px-2 py-1 md:px-3 md:py-1 rounded-full text-xs font-semibold inline-flex items-center ${
                           statusColors[order.orderStatus]?.bg
                         } ${statusColors[order.orderStatus]?.text}`}
                       >
                         {statusColors[order.orderStatus]?.icon}
-                        {order.orderStatus?.charAt(0).toUpperCase() +
-                          order.orderStatus?.slice(1)}
+                        <span className="hidden sm:inline">
+                          {order.orderStatus?.charAt(0).toUpperCase() +
+                            order.orderStatus?.slice(1)}
+                        </span>
+                        <span className="sm:hidden">
+                          {order.orderStatus?.charAt(0).toUpperCase()}
+                        </span>
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-3 md:px-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        className={`px-2 py-1 md:px-3 md:py-1 rounded-full text-xs font-semibold ${
                           paymentStatusColors[order.paymentStatus]?.bg
                         } ${paymentStatusColors[order.paymentStatus]?.text}`}
                       >
-                        {order.paymentStatus?.charAt(0).toUpperCase() +
-                          order.paymentStatus?.slice(1)}
+                        <span className="hidden sm:inline">
+                          {order.paymentStatus?.charAt(0).toUpperCase() +
+                            order.paymentStatus?.slice(1)}
+                        </span>
+                        <span className="sm:hidden">
+                          {order.paymentStatus?.charAt(0).toUpperCase()}
+                        </span>
                       </span>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="text-sm">
-                        {formatDate(order.createdAt)}
+                    <td className="py-3 px-3 md:px-4">
+                      <div className="flex flex-col leading-tight whitespace-nowrap">
+                        <span className="text-xs md:text-sm font-medium text-gray-800">
+                          {new Date(order.createdAt).toLocaleDateString(
+                            "en-IN",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )}
+                        </span>
+                        <span className="text-[11px] md:text-xs text-gray-500">
+                          {new Date(order.createdAt).toLocaleTimeString(
+                            "en-IN",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </span>
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex gap-2">
+
+                    <td className="py-3 px-3 md:px-4">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <button
                           onClick={() => viewOrderDetails(order)}
-                          className="p-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+                          className="p-1 md:p-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-xs md:text-sm flex items-center justify-center"
                           title="View Details"
                         >
-                          <FaEye />
+                          <FaEye className="text-xs md:text-sm" />
+                          <span className="ml-1 hidden sm:inline">View</span>
                         </button>
 
                         {/* Status Update Dropdown */}
@@ -436,7 +462,7 @@ const Orders = () => {
                           onChange={(e) =>
                             updateOrderStatus(order._id, e.target.value)
                           }
-                          className="p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm"
+                          className="p-1 md:p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-xs md:text-sm"
                         >
                           <option value="pending">Pending</option>
                           <option value="confirmed">Confirmed</option>
@@ -450,10 +476,11 @@ const Orders = () => {
 
                         <button
                           onClick={() => deleteOrder(order._id)}
-                          className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition"
+                          className="p-1 md:p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-xs md:text-sm flex items-center justify-center"
                           title="Delete Order"
                         >
-                          <FaTrash />
+                          <FaTrash className="text-xs md:text-sm" />
+                          <span className="ml-1 hidden sm:inline">Delete</span>
                         </button>
                       </div>
                     </td>
@@ -465,46 +492,49 @@ const Orders = () => {
         )}
       </div>
 
-      {/* Order Details Modal */}
+      {/* Order Details Modal - FIXED OVERFLOW */}
       {showOrderDetails && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              {/* Modal Header */}
-              <div className="flex justify-between items-center mb-6">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col my-4">
+            {/* Modal Header - Fixed */}
+            <div className="p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
+              <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-xl font-bold text-[#3f2e20]">
+                  <h3 className="text-lg md:text-xl font-bold text-[#3f2e20]">
                     Order Details
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-xs md:text-sm">
                     Order #
                     {selectedOrder._id.toString().slice(-8).toUpperCase()}
                   </p>
                 </div>
                 <button
                   onClick={closeOrderDetails}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                  className="text-gray-500 hover:text-gray-700 text-xl md:text-2xl w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition flex-shrink-0"
                 >
                   &times;
                 </button>
               </div>
+            </div>
 
+            {/* Scrollable Content Area */}
+            <div className="overflow-y-auto flex-1 p-4 md:p-6">
               {/* Order Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
                 <div>
-                  <h4 className="font-bold text-[#3f2e20] mb-2">
+                  <h4 className="font-bold text-[#3f2e20] mb-2 text-sm md:text-base">
                     Customer Information
                   </h4>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p>
+                  <div className="bg-gray-50 p-3 md:p-4 rounded-lg">
+                    <p className="mb-1 md:mb-2 text-sm">
                       <span className="font-medium">Name:</span>{" "}
                       {selectedOrder.user?.name || "N/A"}
                     </p>
-                    <p>
+                    <p className="mb-1 md:mb-2 text-sm">
                       <span className="font-medium">Email:</span>{" "}
                       {selectedOrder.user?.email || "N/A"}
                     </p>
-                    <p>
+                    <p className="text-sm">
                       <span className="font-medium">Phone:</span>{" "}
                       {selectedOrder.user?.phone || "N/A"}
                     </p>
@@ -512,11 +542,11 @@ const Orders = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-[#3f2e20] mb-2">
+                  <h4 className="font-bold text-[#3f2e20] mb-2 text-sm md:text-base">
                     Order Information
                   </h4>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p>
+                  <div className="bg-gray-50 p-3 md:p-4 rounded-lg">
+                    <p className="mb-1 md:mb-2 text-sm">
                       <span className="font-medium">Status:</span>
                       <span
                         className={`ml-2 px-2 py-1 rounded-full text-xs ${
@@ -526,7 +556,7 @@ const Orders = () => {
                         {selectedOrder.orderStatus}
                       </span>
                     </p>
-                    <p>
+                    <p className="mb-1 md:mb-2 text-sm">
                       <span className="font-medium">Payment:</span>
                       <span
                         className={`ml-2 px-2 py-1 rounded-full text-xs ${
@@ -538,11 +568,11 @@ const Orders = () => {
                         {selectedOrder.paymentStatus}
                       </span>
                     </p>
-                    <p>
+                    <p className="mb-1 md:mb-2 text-sm">
                       <span className="font-medium">Method:</span>{" "}
                       {selectedOrder.paymentMethod}
                     </p>
-                    <p>
+                    <p className="text-sm">
                       <span className="font-medium">Date:</span>{" "}
                       {formatDate(selectedOrder.createdAt)}
                     </p>
@@ -551,62 +581,97 @@ const Orders = () => {
               </div>
 
               {/* Shipping Address */}
-              <div className="mb-6">
-                <h4 className="font-bold text-[#3f2e20] mb-2">
+              <div className="mb-4 md:mb-6">
+                <h4 className="font-bold text-[#3f2e20] mb-2 text-sm md:text-base">
                   Shipping Address
                 </h4>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p>{selectedOrder.shippingAddress?.street || "N/A"}</p>
-                  <p>
+                <div className="bg-gray-50 p-3 md:p-4 rounded-lg">
+                  <p className="mb-1 text-sm">
+                    {selectedOrder.shippingAddress?.street || "N/A"}
+                  </p>
+                  <p className="mb-1 text-sm">
                     {selectedOrder.shippingAddress?.city},{" "}
                     {selectedOrder.shippingAddress?.state}
                   </p>
-                  <p>
+                  <p className="text-sm">
                     {selectedOrder.shippingAddress?.zipCode} -{" "}
                     {selectedOrder.shippingAddress?.country}
                   </p>
                 </div>
               </div>
 
-              {/* Order Items */}
-              <div className="mb-6">
-                <h4 className="font-bold text-[#3f2e20] mb-2">
+              {/* Order Items - FIXED OVERFLOW */}
+              <div className="mb-4 md:mb-6">
+                <h4 className="font-bold text-[#3f2e20] mb-2 text-sm md:text-base">
                   Order Items ({selectedOrder.items.length})
                 </h4>
-                <div className="space-y-3">
-                  {selectedOrder.items.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg"
-                    >
-                      {item.img && (
-                        <img
-                          src={item.img}
-                          alt={item.name}
-                          className="w-16 h-16 rounded object-cover"
-                        />
-                      )}
-                      <div className="flex-1">
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-600">
-                          Quantity: {item.qty}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-bold">₹{item.price.toFixed(2)}</p>
-                        <p className="text-sm text-gray-600">
-                          Total: ₹{(item.price * item.qty).toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[600px] md:min-w-full">
+                    <thead>
+                      <tr className="bg-[#f7e8dc] text-[#3f2e20] text-xs md:text-sm">
+                        <th className="py-2 px-2 md:px-3 text-left">Item</th>
+                        <th className="py-2 px-2 md:px-3 text-left">
+                          Quantity
+                        </th>
+                        <th className="py-2 px-2 md:px-3 text-left">Price</th>
+                        <th className="py-2 px-2 md:px-3 text-left">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedOrder.items.map((item, index) => (
+                        <tr
+                          key={index}
+                          className="border-b border-gray-100 hover:bg-gray-50"
+                        >
+                          <td className="py-2 md:py-3 px-2 md:px-3">
+                            <div className="flex items-center gap-2 md:gap-3">
+                              {item.img && (
+                                <img
+                                  src={item.img}
+                                  alt={item.name}
+                                  className="w-8 h-8 md:w-12 md:h-12 rounded object-cover flex-shrink-0"
+                                />
+                              )}
+                              <div className="min-w-0">
+                                <p className="font-medium text-xs md:text-sm truncate">
+                                  {item.name}
+                                </p>
+                                {item.variation && (
+                                  <p className="text-xs text-gray-500 truncate">
+                                    {item.variation}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-2 md:py-3 px-2 md:px-3">
+                            <div className="font-medium text-xs md:text-sm">
+                              {item.qty}
+                            </div>
+                          </td>
+                          <td className="py-2 md:py-3 px-2 md:px-3">
+                            <div className="font-medium text-xs md:text-sm">
+                              ₹{item.price.toFixed(2)}
+                            </div>
+                          </td>
+                          <td className="py-2 md:py-3 px-2 md:px-3">
+                            <div className="font-bold text-xs md:text-sm">
+                              ₹{(item.price * item.qty).toFixed(2)}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
               {/* Order Summary */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-bold text-[#3f2e20] mb-2">Order Summary</h4>
-                <div className="space-y-2">
+              <div className="bg-gray-50 p-3 md:p-4 rounded-lg">
+                <h4 className="font-bold text-[#3f2e20] mb-2 text-sm md:text-base">
+                  Order Summary
+                </h4>
+                <div className="space-y-1 md:space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>
                     <span>
@@ -623,7 +688,7 @@ const Orders = () => {
                     <span>Delivery Charge:</span>
                     <span>₹{selectedOrder.deliveryCharge || "0.00"}</span>
                   </div>
-                  <div className="flex justify-between font-bold text-lg border-t pt-2">
+                  <div className="flex justify-between font-bold text-base md:text-lg border-t pt-2 mt-2">
                     <span>Total Amount:</span>
                     <span className="text-[#d69e64]">
                       ₹{selectedOrder.totalAmount.toFixed(2)}
@@ -631,12 +696,14 @@ const Orders = () => {
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex justify-end gap-3 mt-6">
+            {/* Fixed Footer with Action Buttons */}
+            <div className="p-4 md:p-6 border-t border-gray-200 flex-shrink-0">
+              <div className="flex flex-col sm:flex-row justify-end gap-2 md:gap-3">
                 <button
                   onClick={closeOrderDetails}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                  className="px-3 py-2 md:px-4 md:py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium text-sm md:text-base"
                 >
                   Close
                 </button>
@@ -645,7 +712,7 @@ const Orders = () => {
                     // Print order
                     window.print();
                   }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  className="px-3 py-2 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm md:text-base"
                 >
                   Print Invoice
                 </button>

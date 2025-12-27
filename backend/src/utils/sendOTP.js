@@ -1,28 +1,68 @@
-const nodemailer = require("nodemailer");
-const { otpTemplate } = require("./emailTemplates");  // ⬅ IMPORT TEMPLATE
+// const axios = require("axios");
+// const { otpTemplate } = require("./emailTemplates");
+
+// const sendOTPEmail = async (email, otp) => {
+//   try {
+//     const response = await axios.post(
+//       "https://api.brevo.com/v3/smtp/email",
+//       {
+//         sender: { email: process.env.FROM_EMAIL, name: "Graphura" },
+//         to: [{ email }],
+//         subject: "Your OTP Code",
+//         htmlContent: otpTemplate(otp),
+//       },
+//       {
+//         headers: {
+//           "api-key": process.env.BREVO_API_KEY,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     console.log("📧 Brevo OTP sent:", response.data);
+//   } catch (err) {
+//     console.error("❌ Brevo OTP Error:", err.response?.data || err.message);
+//     throw new Error("Failed to send OTP Email");
+//   }
+// };
+
+// module.exports = { sendOTPEmail };
+
+const axios = require("axios");
+const { otpTemplate } = require("./emailTemplates");
+require("dotenv").config();
 
 const sendOTPEmail = async (email, otp) => {
+  console.log("BREVO KEY LENGTH:", process.env.BREVO_API_KEY?.length);
+
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+    const response = await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          email: process.env.FROM_EMAIL,
+          name: "Graphura",
+        },
+        to: [{ email }],
+        subject: "Your OTP Code",
+        htmlContent: otpTemplate(otp),
       },
-    });
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    const mailOptions = {
-      from: `"Graphura" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Your OTP",
-      html: otpTemplate(otp),   // ⬅ USE TEMPLATE HERE
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log("OTP email sent to:", email);
+    console.log("📧 Brevo OTP sent:", response.data);
+    return true;
   } catch (err) {
-    console.error("OTP Email Error:", err);
-    throw new Error("Failed to send OTP Email");
+    console.error(
+      "❌ Brevo OTP Error FULL LOG:",
+      err?.response?.data || err.message || err
+    );
+    return false;
   }
 };
 

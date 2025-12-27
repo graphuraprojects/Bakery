@@ -15,7 +15,11 @@ router.post("/admin/login", adminController.adminLogin);
 
 /* ===== ADMIN PROFILE ===== */
 router.get("/admin/me", adminAuth, adminController.getAdminProfile);
-router.put("/admin/update-profile/:id", adminAuth, adminController.updateAdminProfile);
+router.put(
+  "/admin/update-profile/:id",
+  adminAuth,
+  adminController.updateAdminProfile
+);
 router.put(
   "/admin/upload-profile-pic",
   adminAuth,
@@ -48,11 +52,7 @@ router.patch(
   adminAuth,
   adminController.blockUnblockUser
 );
-router.delete(
-  "/admin/user/:id",
-  adminAuth,
-  adminController.deleteUser
-);
+router.delete("/admin/user/:id", adminAuth, adminController.deleteUser);
 
 /* ===== ORDERS ===== */
 router.get("/admin/orders", adminAuth, adminController.getOrders);
@@ -61,10 +61,8 @@ router.put(
   adminAuth,
   adminController.updateOrderStatus
 );
-router.delete(
-  "/admin/orders/:id",
-  adminAuth,
-  adminController.deleteOrder
-);
-
+router.delete("/admin/orders/:id", adminAuth, adminController.deleteOrder);
+router.post("/admin/forgot-password", adminController.adminForgotPassword);
+router.put("/admin/reset-password", adminController.adminResetPassword);
+router.post("/admin/verify-otp", adminController.adminVerifyOtp);
 module.exports = router;

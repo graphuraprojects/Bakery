@@ -54,7 +54,7 @@ const Homepage = () => {
                     className="px-6 py-2 rounded-full bg-gradient-to-r from-[#dda56a] to-[#e8b381] 
                                           text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition cursor-pointer"
                   >
-                    Order Now
+                    Order
                   </button>
                 </Link>
                 <Link to="/menu">

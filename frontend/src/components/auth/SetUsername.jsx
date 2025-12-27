@@ -51,10 +51,7 @@ const SetUsername = () => {
 
       console.log("🔄 Setting username for:", userInfo.email);
 
-      const res = await axios.post(
-        `/api/auth/set-username`,
-        payload
-      );
+      const res = await axios.post(`/api/auth/set-username`, payload);
 
       console.log("✅ Username set response:", res.data);
 
@@ -145,7 +142,7 @@ const SetUsername = () => {
         <button
           type="submit"
           disabled={loading || username.length < 3}
-          className="w-full bg-[#dfa26d] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#e6b07c] transition-all duration-300 disabled:opacity-60 flex items-center justify-center gap-2"
+          className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
         >
           {loading ? (
             <>

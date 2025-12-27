@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCart } from "../redux/Slice";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+// import axios from "axios";
 
 const OrderSuccess = () => {
   const navigate = useNavigate();
@@ -261,14 +261,11 @@ const OrderSuccess = () => {
         if (dbOrderId) {
           try {
             const token = localStorage.getItem("token");
-            const orderRes = await fetch(
-              `/api/orders/${dbOrderId}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
+            const orderRes = await fetch(`/api/orders/${dbOrderId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
 
             if (orderRes.ok) {
               const orderData = await orderRes.json();
@@ -803,7 +800,7 @@ const OrderSuccess = () => {
                   Back to Home
                 </button>
 
-                <button
+                {/* <button
                   onClick={() => {
                     toast.success(
                       "Invoice will be sent to your email shortly!"
@@ -812,7 +809,7 @@ const OrderSuccess = () => {
                   className="w-full py-2 sm:py-3 bg-blue-600 text-white rounded-lg sm:rounded-xl font-semibold hover:bg-blue-700 transition-colors text-sm sm:text-base"
                 >
                   Get Invoice
-                </button>
+                </button> */}
               </div>
             </div>
 

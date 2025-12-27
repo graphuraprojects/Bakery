@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const VerifyForgetPasswordOTP = () => {
+const AdminVerifyForgotPasswordOTP = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -10,30 +10,40 @@ const VerifyForgetPasswordOTP = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("fpEmail");
+    // 🔥 ADMIN EMAIL KEY
+    const storedEmail = localStorage.getItem("adminFpEmail");
 
     if (!storedEmail) {
-      setMessage("❌ No email found. Please restart password reset process.");
+      setMessage(
+        "❌ No admin email found. Please restart password reset process."
+      );
+      navigate("/admin/forgot-password");
     } else {
       setEmail(storedEmail);
     }
-  }, []);
+  }, [navigate]);
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
 
+    if (!otp || otp.length !== 6) {
+      setMessage("Please enter a valid 6-digit OTP");
+      return;
+    }
+
     try {
-      const res = await axios.post("/api/auth/verify-otp", {
+      await axios.post("/api/admin/verify-otp", {
         email,
         otp,
-        purpose: "forgot-password",
       });
 
-      if (res.data.purpose === "forgot-password") {
-        navigate("/reset-password");
-      }
+      // ✅ SUCCESS → RESET PASSWORD
+      navigate("/admin/reset-password");
     } catch (err) {
-      setMessage("❌ OTP verification failed. Please try again.");
+      setMessage(
+        err.response?.data?.message ||
+          "❌ OTP verification failed. Please try again."
+      );
     }
   };
 
@@ -41,7 +51,7 @@ const VerifyForgetPasswordOTP = () => {
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-yellow-100 via-orange-100 to-white">
       <div className="w-full max-w-md bg-white shadow-lg p-8 rounded-2xl border border-gray-200">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Verify OTP
+          Admin Verify OTP
         </h1>
 
         <p className="text-center text-gray-600 mb-4">
@@ -50,7 +60,6 @@ const VerifyForgetPasswordOTP = () => {
         </p>
 
         <form onSubmit={handleVerifyOtp} className="space-y-4">
-          {/* OTP Input */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Enter OTP
@@ -65,16 +74,13 @@ const VerifyForgetPasswordOTP = () => {
             />
           </div>
 
-          {/* Verify Button */}
           <button
             type="submit"
             className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
-
           >
             Verify OTP
           </button>
 
-          {/* Message */}
           {message && (
             <p className="text-center font-medium text-gray-700 mt-3">
               {message}
@@ -86,4 +92,4 @@ const VerifyForgetPasswordOTP = () => {
   );
 };
 
-export default VerifyForgetPasswordOTP;
+export default AdminVerifyForgotPasswordOTP;

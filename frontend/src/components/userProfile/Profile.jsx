@@ -12,7 +12,7 @@ import { toast } from "react-hot-toast";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 export default function Profile() {
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  // const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ export default function Profile() {
   const checkTokenValidity = () => {
     const adminToken = localStorage.getItem("adminToken");
     const userToken = localStorage.getItem("userToken");
-    
+
     // Check if tokens exist and are not expired
     if (adminToken) {
       try {
@@ -39,7 +39,7 @@ export default function Profile() {
         console.error("Invalid admin token:", e);
       }
     }
-    
+
     if (userToken) {
       try {
         const payload = JSON.parse(atob(userToken.split(".")[1]));
@@ -50,7 +50,7 @@ export default function Profile() {
         console.error("Invalid user token:", e);
       }
     }
-    
+
     return { valid: false, type: null, token: null };
   };
 
@@ -70,9 +70,9 @@ export default function Profile() {
     const fetchProfileData = async () => {
       setLoading(true);
       setSessionExpired(false);
-      
+
       const tokenInfo = checkTokenValidity();
-      
+
       if (!tokenInfo.valid) {
         toast.error("Session expired. Please login again.");
         clearAuthData();
@@ -81,22 +81,21 @@ export default function Profile() {
         setTimeout(() => navigate("/login"), 1500);
         return;
       }
-      
+
       setUserType(tokenInfo.type);
-      
-      const endpoint = tokenInfo.type === "admin" 
-        ? "/api/admin/me" 
-        : "/api/auth/me";
-      
+
+      const endpoint =
+        tokenInfo.type === "admin" ? "/api/admin/me" : "/api/auth/me";
+
       try {
         const res = await axios.get(endpoint, {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${tokenInfo.token}`,
-            "Cache-Control": "no-cache"
+            "Cache-Control": "no-cache",
           },
-          timeout: 10000 // 10 second timeout
+          timeout: 10000, // 10 second timeout
         });
-        
+
         // Handle different response structures
         if (tokenInfo.type === "admin") {
           setUser(res.data.admin || res.data);
@@ -105,9 +104,9 @@ export default function Profile() {
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
-        
+
         // Handle different error types
-        if (err.code === 'ECONNABORTED') {
+        if (err.code === "ECONNABORTED") {
           toast.error("Request timeout. Please try again.");
         } else if (err.response) {
           // Server responded with error
@@ -151,11 +150,11 @@ export default function Profile() {
 
       try {
         const response = await axios.get("/api/orders/my", {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
-            "Cache-Control": "no-cache"
+            "Cache-Control": "no-cache",
           },
-          timeout: 10000
+          timeout: 10000,
         });
 
         if (response.data.success) {
@@ -343,17 +342,21 @@ export default function Profile() {
     try {
       // Clear local storage first
       clearAuthData();
-      
+
       // Try to call logout API (optional)
       try {
-        await axios.post("/api/auth/logout", {}, {
-          timeout: 5000
-        });
+        await axios.post(
+          "/api/auth/logout",
+          {},
+          {
+            timeout: 5000,
+          }
+        );
       } catch (apiError) {
         // API call failed, but we've already cleared local storage
         console.log("Logout API call optional");
       }
-      
+
       toast.success("Logged out successfully!");
       setTimeout(() => {
         window.location.href = "/home";
@@ -367,7 +370,7 @@ export default function Profile() {
   // Handle refresh orders
   const handleRefreshOrders = async () => {
     if (sessionExpired || userType !== "user") return;
-    
+
     const token = localStorage.getItem("userToken");
     if (!token) {
       toast.error("Please login again");
@@ -412,11 +415,15 @@ export default function Profile() {
   // Session expired state
   if (sessionExpired) {
     return (
-      <div className="h-screen flex flex-col justify-center items-center bg-[#f8f7f6]">
-        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center">
+      <div className="h-screen flex flex-col justify-center items-center bg-[#f8f7f6] ">
+        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center ">
           <div className="text-5xl mb-4">🔒</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Session Expired</h2>
-          <p className="text-gray-600 mb-6">Your session has expired. Please login again.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Session Expired
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Your session has expired. Please login again.
+          </p>
           <button
             onClick={() => navigate("/login")}
             className="px-6 py-3 bg-[#dfa26d] text-white rounded-lg hover:bg-[#c98f5f] transition font-semibold"
@@ -433,8 +440,12 @@ export default function Profile() {
     return (
       <div className="h-screen flex flex-col justify-center items-center bg-[#f8f7f6]">
         <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">No Profile Data</h2>
-          <p className="text-gray-600 mb-6">Unable to load profile information.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            No Profile Data
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Unable to load profile information.
+          </p>
           <button
             onClick={() => navigate("/login")}
             className="px-6 py-3 bg-[#dfa26d] text-white rounded-lg hover:bg-[#c98f5f] transition font-semibold"
@@ -456,8 +467,8 @@ export default function Profile() {
   const hasProfilePic = Boolean(user?.profilePicture);
 
   return (
-    <div className="font-display bg-[#f8f7f6] min-h-screen text-[#181411] px-4 py-10">
-      <div className="mx-auto w-full max-w-7xl">
+    <div className="font-display bg-[#f8f7f6] min-h-screen text-[#181411] px-4 py-10 ">
+      <div className="mx-auto w-full max-w-7xl mt-15">
         <div className="flex flex-col gap-8 md:flex-row">
           {/* SIDEBAR */}
           <aside className="w-full md:w-64 lg:w-72 h-[300px]">
@@ -470,7 +481,9 @@ export default function Profile() {
                     <div
                       className="bg-center bg-cover bg-no-repeat rounded-full size-12 border"
                       style={{
-                        backgroundImage: `url("${getImageUrl(user.profilePicture)}")`,
+                        backgroundImage: `url("${getImageUrl(
+                          user.profilePicture
+                        )}")`,
                       }}
                     ></div>
                   ) : (
@@ -562,7 +575,8 @@ export default function Profile() {
                     alt="profile"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                      e.target.src =
+                        "https://cdn-icons-png.flaticon.com/512/149/149071.png";
                     }}
                   />
                 ) : (
@@ -573,13 +587,17 @@ export default function Profile() {
 
                 <div>
                   <h1 className="text-xl font-semibold">{user?.name}</h1>
-                  <p className="text-gray-500">@{user?.username || user?.email?.split('@')[0]}</p>
+                  <p className="text-gray-500">
+                    @{user?.username || user?.email?.split("@")[0]}
+                  </p>
                   {userType === "admin" && user?.role && (
-                    <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full mt-1 ${
-                      user.role === "super-admin" 
-                        ? "bg-purple-100 text-purple-700" 
-                        : "bg-blue-100 text-blue-700"
-                    }`}>
+                    <span
+                      className={`inline-block px-3 py-1 text-xs font-semibold rounded-full mt-1 ${
+                        user.role === "super-admin"
+                          ? "bg-purple-100 text-purple-700"
+                          : "bg-blue-100 text-blue-700"
+                      }`}
+                    >
                       {user.role}
                     </span>
                   )}
@@ -596,12 +614,16 @@ export default function Profile() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <p className="text-sm text-gray-500 font-medium">Full Name</p>
-                  <p className="text-base font-semibold mt-1">{user?.name || "Not set"}</p>
+                  <p className="text-base font-semibold mt-1">
+                    {user?.name || "Not set"}
+                  </p>
                 </div>
 
                 <div>
                   <p className="text-sm text-gray-500 font-medium">Email</p>
-                  <p className="text-base font-semibold mt-1">{user?.email || "Not set"}</p>
+                  <p className="text-base font-semibold mt-1">
+                    {user?.email || "Not set"}
+                  </p>
                 </div>
 
                 <div>
@@ -618,20 +640,27 @@ export default function Profile() {
                     {userType === "user" ? "Delivery Address" : "Role"}
                   </p>
                   <p className="text-base font-semibold mt-1">
-                    {userType === "user" 
-                      ? (user?.address
-                        ? `${user.address.street || ""}, ${user.address.city || ""}, ${user.address.state || ""}, ${user.address.pincode || ""}`
-                        : "Not Added")
-                      : (user?.role || "Admin")
-                    }
+                    {userType === "user"
+                      ? user?.address
+                        ? `${user.address.street || ""}, ${
+                            user.address.city || ""
+                          }, ${user.address.state || ""}, ${
+                            user.address.pincode || ""
+                          }`
+                        : "Not Added"
+                      : user?.role || "Admin"}
                   </p>
                 </div>
               </div>
 
               {/* EDIT PROFILE BUTTON (FOR BOTH USER AND ADMIN) */}
               <div className="flex justify-end mt-6">
-                <Link 
-                  to={userType === "admin" ? "/admin/edit-profile" : "/edit-profile"}
+                <Link
+                  to={
+                    userType === "admin"
+                      ? "/admin/edit-profile"
+                      : "/edit-profile"
+                  }
                   state={{ userType }}
                 >
                   <button
@@ -647,7 +676,10 @@ export default function Profile() {
 
             {/* ORDER HISTORY (ONLY FOR USERS) */}
             {userType === "user" && (
-              <div id="order-history" className="rounded-xl bg-white p-6 shadow-sm">
+              <div
+                id="order-history"
+                className="rounded-xl bg-white p-6 shadow-sm"
+              >
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h2 className="text-2xl font-bold mb-1">Order History</h2>
@@ -660,7 +692,13 @@ export default function Profile() {
                     disabled={ordersLoading || sessionExpired}
                     className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    <i className={`bx ${ordersLoading ? 'bx-loader-alt animate-spin' : 'bx-refresh'}`}></i>
+                    <i
+                      className={`bx ${
+                        ordersLoading
+                          ? "bx-loader-alt animate-spin"
+                          : "bx-refresh"
+                      }`}
+                    ></i>
                     Refresh Orders
                   </button>
                 </div>
@@ -703,7 +741,10 @@ export default function Profile() {
                                 <FaShoppingBag className="text-[#dda56a]" />
                                 <h3 className="font-bold text-lg">
                                   Order #
-                                  {order._id?.toString().slice(-8).toUpperCase() || 'N/A'}
+                                  {order._id
+                                    ?.toString()
+                                    .slice(-8)
+                                    .toUpperCase() || "N/A"}
                                 </h3>
                               </div>
                               <p className="text-sm text-gray-500">
@@ -737,49 +778,53 @@ export default function Profile() {
                               {(order.items?.length || 0) > 1 ? "s" : ""}:
                             </p>
                             <div className="flex flex-wrap gap-2">
-                              {(order.items || []).slice(0, 3).map((item, index) => {
-                                const isCustomCake =
-                                  item.isCustomCake ||
-                                  item.category === "custom" ||
-                                  item.name?.toLowerCase().includes("custom");
+                              {(order.items || [])
+                                .slice(0, 3)
+                                .map((item, index) => {
+                                  const isCustomCake =
+                                    item.isCustomCake ||
+                                    item.category === "custom" ||
+                                    item.name?.toLowerCase().includes("custom");
 
-                                return (
-                                  <div
-                                    key={index}
-                                    className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2"
-                                  >
-                                    <img
-                                      src={item.img || item.image || "/cake5.jpg"}
-                                      alt={item.name}
-                                      className="w-10 h-10 rounded object-cover"
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = isCustomCake
-                                          ? "/Image/custom-cake-default.jpg"
-                                          : "/cake5.jpg";
-                                      }}
-                                    />
-                                    <div>
-                                      <p className="text-sm font-medium">
-                                        {item.name || "Unnamed Item"}
-                                        {isCustomCake && (
-                                          <span className="ml-1 text-xs text-rose-500 font-medium">
-                                            (Custom)
-                                          </span>
-                                        )}
-                                      </p>
-                                      <p className="text-xs text-gray-500">
-                                        {item.qty || 1} × ₹{item.price || 0}
-                                        {isCustomCake && item.message && (
-                                          <span className="block truncate">
-                                            "{item.message}"
-                                          </span>
-                                        )}
-                                      </p>
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2"
+                                    >
+                                      <img
+                                        src={
+                                          item.img || item.image || "/cake5.jpg"
+                                        }
+                                        alt={item.name}
+                                        className="w-10 h-10 rounded object-cover"
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = isCustomCake
+                                            ? "/Image/custom-cake-default.jpg"
+                                            : "/cake5.jpg";
+                                        }}
+                                      />
+                                      <div>
+                                        <p className="text-sm font-medium">
+                                          {item.name || "Unnamed Item"}
+                                          {isCustomCake && (
+                                            <span className="ml-1 text-xs text-rose-500 font-medium">
+                                              (Custom)
+                                            </span>
+                                          )}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                          {item.qty || 1} × ₹{item.price || 0}
+                                          {isCustomCake && item.message && (
+                                            <span className="block truncate">
+                                              "{item.message}"
+                                            </span>
+                                          )}
+                                        </p>
+                                      </div>
                                     </div>
-                                  </div>
-                                );
-                              })}
+                                  );
+                                })}
                               {(order.items?.length || 0) > 3 && (
                                 <div className="bg-gray-50 rounded-lg px-3 py-2 flex items-center">
                                   <span className="text-sm text-gray-600">
@@ -802,7 +847,8 @@ export default function Profile() {
                                   : order.paymentMethod || "Unknown"}
                               </p>
                               <p className="text-sm text-gray-600">
-                                Delivery to: {order.shippingAddress?.city || "Unknown"},{" "}
+                                Delivery to:{" "}
+                                {order.shippingAddress?.city || "Unknown"},{" "}
                                 {order.shippingAddress?.state || "Unknown"}
                               </p>
                             </div>
@@ -820,11 +866,11 @@ export default function Profile() {
 
                           {/* Action Buttons */}
                           <div className="flex gap-3 mt-4">
-                            <Link to={`/order-details/${order._id}`}>
+                            {/* <Link to={`/order-details/${order._id}`}>
                               <button className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
                                 View Details
                               </button>
-                            </Link>
+                            </Link> */}
 
                             {order.orderStatus === "delivered" && (
                               <button className="px-4 py-2 text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition">
@@ -865,7 +911,10 @@ export default function Profile() {
                       <p className="text-2xl font-bold">
                         ₹
                         {orders
-                          .reduce((sum, order) => sum + (order.totalAmount || 0), 0)
+                          .reduce(
+                            (sum, order) => sum + (order.totalAmount || 0),
+                            0
+                          )
                           .toFixed(2)}
                       </p>
                     </div>
@@ -902,12 +951,13 @@ export default function Profile() {
                   <div className="bg-blue-50 p-6 rounded-xl">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-blue-600 font-medium">Admin Since</p>
+                        <p className="text-sm text-blue-600 font-medium">
+                          Admin Since
+                        </p>
                         <p className="text-2xl font-bold mt-2">
-                          {user?.createdAt 
+                          {user?.createdAt
                             ? formatDate(user.createdAt)
-                            : "Recently"
-                          }
+                            : "Recently"}
                         </p>
                       </div>
                       <div className="text-3xl text-blue-500">
@@ -919,7 +969,9 @@ export default function Profile() {
                   <div className="bg-green-50 p-6 rounded-xl">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-green-600 font-medium">Access Level</p>
+                        <p className="text-sm text-green-600 font-medium">
+                          Access Level
+                        </p>
                         <p className="text-2xl font-bold mt-2 capitalize">
                           {user?.role || "Admin"}
                         </p>
@@ -933,10 +985,10 @@ export default function Profile() {
                   <div className="bg-purple-50 p-6 rounded-xl">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-purple-600 font-medium">Status</p>
-                        <p className="text-2xl font-bold mt-2">
-                          Active
+                        <p className="text-sm text-purple-600 font-medium">
+                          Status
                         </p>
+                        <p className="text-2xl font-bold mt-2">Active</p>
                       </div>
                       <div className="text-3xl text-purple-500">
                         <i className="bx bx-check-circle"></i>
@@ -956,7 +1008,8 @@ export default function Profile() {
           <div className="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl">
             <h2 className="text-xl font-semibold mb-2">Delete Account?</h2>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to permanently delete your account? This action cannot be undone.
+              Are you sure you want to permanently delete your account? This
+              action cannot be undone.
             </p>
             <div className="flex justify-end gap-3">
               <button

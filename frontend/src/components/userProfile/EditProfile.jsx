@@ -6,12 +6,12 @@ import { toast } from "react-hot-toast";
 
 export default function EditProfile() {
   const [user, setUser] = useState(null);
-  const [previewImg, setPreviewImg] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const [setPreviewImg] = useState(null);
+  const [imageFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [userType, setUserType] = useState(null); // 'user' or 'admin'
-  
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,7 +30,7 @@ export default function EditProfile() {
   const checkTokenValidity = () => {
     const adminToken = localStorage.getItem("adminToken");
     const userToken = localStorage.getItem("userToken");
-    
+
     if (adminToken && adminToken !== "undefined" && adminToken !== "null") {
       try {
         const payload = JSON.parse(atob(adminToken.split(".")[1]));
@@ -43,7 +43,7 @@ export default function EditProfile() {
         return { valid: true, type: "admin", token: adminToken };
       }
     }
-    
+
     if (userToken && userToken !== "undefined" && userToken !== "null") {
       try {
         const payload = JSON.parse(atob(userToken.split(".")[1]));
@@ -55,7 +55,7 @@ export default function EditProfile() {
         return { valid: true, type: "user", token: userToken };
       }
     }
-    
+
     return { valid: false, type: null, token: null };
   };
 
@@ -75,13 +75,17 @@ export default function EditProfile() {
     if (!profilePicture) {
       return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     }
-    
+
     try {
       // Check if it's already a full URL
-      if (profilePicture.startsWith("http://") || profilePicture.startsWith("https://") || profilePicture.startsWith("data:")) {
+      if (
+        profilePicture.startsWith("http://") ||
+        profilePicture.startsWith("https://") ||
+        profilePicture.startsWith("data:")
+      ) {
         return profilePicture;
       }
-      
+
       // Use the utility function
       const url = getImageUrl(profilePicture);
       return url || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -95,34 +99,33 @@ export default function EditProfile() {
   useEffect(() => {
     const fetchProfileData = async () => {
       setLoading(true);
-      
+
       const tokenInfo = checkTokenValidity();
-      
+
       if (!tokenInfo.valid) {
         toast.error("Session expired. Please login again.");
         clearAuthData();
         setTimeout(() => navigate("/login"), 1500);
         return;
       }
-      
+
       setUserType(tokenInfo.type);
-      
+
       // Set endpoints based on user type
-      const endpoint = tokenInfo.type === "admin" 
-        ? "/api/admin/me" 
-        : "/api/auth/me";
-      
+      const endpoint =
+        tokenInfo.type === "admin" ? "/api/admin/me" : "/api/auth/me";
+
       try {
         console.log("Fetching from endpoint:", endpoint);
-        
+
         const res = await axios.get(endpoint, {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${tokenInfo.token}`,
           },
         });
-        
+
         console.log("Profile API response:", res.data);
-        
+
         let userData;
         if (tokenInfo.type === "admin") {
           // Admin response structure
@@ -133,7 +136,7 @@ export default function EditProfile() {
           userData = res.data.user || res.data;
           console.log("User data:", userData);
         }
-        
+
         setUser(userData);
 
         // Set form values
@@ -145,7 +148,7 @@ export default function EditProfile() {
           city: userData?.address?.city || "",
           state: userData?.address?.state || "",
           pincode: userData?.address?.pincode || "",
-          username: userData?.username || userData?.email?.split('@')[0] || "",
+          username: userData?.username || userData?.email?.split("@")[0] || "",
         });
 
         // Set preview image if exists
@@ -154,15 +157,20 @@ export default function EditProfile() {
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
-        
+
         // Show detailed error info
         if (err.response) {
           console.error("Response status:", err.response.status);
           console.error("Response data:", err.response.data);
-          
+
           if (err.response.status === 404) {
-            toast.error("Profile endpoint not found. Please check backend routes.");
-          } else if (err.response.status === 401 || err.response.status === 403) {
+            toast.error(
+              "Profile endpoint not found. Please check backend routes."
+            );
+          } else if (
+            err.response.status === 401 ||
+            err.response.status === 403
+          ) {
             toast.error("Session expired. Please login again.");
             clearAuthData();
             setTimeout(() => navigate("/login"), 1500);
@@ -184,33 +192,33 @@ export default function EditProfile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        toast.error("Please select an image file (JPG, PNG, etc.)");
-        return;
-      }
-      
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB");
-        return;
-      }
-      
-      setPreviewImg(URL.createObjectURL(file));
-      setImageFile(file);
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     // Validate file type
+  //     if (!file.type.startsWith('image/')) {
+  //       toast.error("Please select an image file (JPG, PNG, etc.)");
+  //       return;
+  //     }
+
+  //     // Validate file size (max 5MB)
+  //     if (file.size > 5 * 1024 * 1024) {
+  //       toast.error("Image size should be less than 5MB");
+  //       return;
+  //     }
+
+  //     setPreviewImg(URL.createObjectURL(file));
+  //     setImageFile(file);
+  //   }
+  // };
 
   /* ================= UPDATE PROFILE ================= */
   const handleUpdateProfile = async () => {
     const tokenInfo = checkTokenValidity();
-    
+
     if (!tokenInfo.valid) {
       toast.error("Session expired. Please login again.");
       clearAuthData();
@@ -219,19 +227,19 @@ export default function EditProfile() {
     }
 
     setSaving(true);
-    
+
     try {
       // For Admin updates
       if (userType === "admin") {
         console.log("Updating admin profile...");
-        
+
         let profilePictureUrl = user?.profilePicture;
 
         // 1️⃣ Upload profile image if selected
         if (imageFile) {
           const fd = new FormData();
           fd.append("profilePic", imageFile);
-          
+
           try {
             console.log("Uploading admin profile picture...");
             const imgRes = await axios.put(
@@ -244,15 +252,21 @@ export default function EditProfile() {
                 },
               }
             );
-            
+
             console.log("Admin image upload response:", imgRes.data);
             if (imgRes.data.profilePicture) {
               profilePictureUrl = imgRes.data.profilePicture;
               toast.success("Profile picture uploaded!");
             }
           } catch (imgError) {
-            console.error("Admin image upload error:", imgError.response?.data || imgError.message);
-            toast.error(imgError.response?.data?.message || "Failed to upload profile picture");
+            console.error(
+              "Admin image upload error:",
+              imgError.response?.data || imgError.message
+            );
+            toast.error(
+              imgError.response?.data?.message ||
+                "Failed to upload profile picture"
+            );
             // Continue with profile update even if image upload fails
           }
         }
@@ -262,19 +276,19 @@ export default function EditProfile() {
           name: form.name.trim(),
           phone: form.phone.trim(),
         };
-        
+
         // Only include email if it's different (though usually can't change)
         if (form.email !== user?.email) {
           updateData.email = form.email.trim();
         }
 
         console.log("Sending admin update:", updateData);
-        
+
         const res = await axios.put(
           `/api/admin/update-profile/${user._id}`,
           updateData,
           {
-            headers: { 
+            headers: {
               Authorization: `Bearer ${tokenInfo.token}`,
             },
           }
@@ -287,17 +301,16 @@ export default function EditProfile() {
         if (profilePictureUrl) {
           updatedAdmin.profilePicture = profilePictureUrl;
         }
-        
+
         localStorage.setItem("adminInfo", JSON.stringify(updatedAdmin));
         setUser(updatedAdmin);
-        
+
         toast.success("Admin profile updated successfully!");
         setTimeout(() => navigate("/profile"), 1000);
-
       } else {
         // For User updates
         console.log("Updating user profile...");
-        
+
         let updatedUser = { ...user };
         let profilePictureUrl = user?.profilePicture;
 
@@ -308,16 +321,12 @@ export default function EditProfile() {
 
           try {
             console.log("Uploading user profile picture...");
-            const imgRes = await axios.put(
-              "/api/user/upload-profile-pic",
-              fd,
-              {
-                headers: {
-                  Authorization: `Bearer ${tokenInfo.token}`,
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
+            const imgRes = await axios.put("/api/user/upload-profile-pic", fd, {
+              headers: {
+                Authorization: `Bearer ${tokenInfo.token}`,
+                "Content-Type": "multipart/form-data",
+              },
+            });
 
             console.log("User image upload response:", imgRes.data);
             if (imgRes.data.profilePicture) {
@@ -326,8 +335,14 @@ export default function EditProfile() {
               toast.success("Profile picture uploaded!");
             }
           } catch (imgError) {
-            console.error("User image upload error:", imgError.response?.data || imgError.message);
-            toast.error(imgError.response?.data?.message || "Failed to upload profile picture");
+            console.error(
+              "User image upload error:",
+              imgError.response?.data || imgError.message
+            );
+            toast.error(
+              imgError.response?.data?.message ||
+                "Failed to upload profile picture"
+            );
             // Continue with profile update
           }
         }
@@ -349,7 +364,9 @@ export default function EditProfile() {
           updatedUser = { ...updatedUser, ...profileRes.data.user };
         } catch (profileError) {
           console.error("Profile update error:", profileError);
-          toast.error(profileError.response?.data?.message || "Failed to update profile");
+          toast.error(
+            profileError.response?.data?.message || "Failed to update profile"
+          );
         }
 
         // 3️⃣ Update phone if changed
@@ -378,7 +395,7 @@ export default function EditProfile() {
 
         // Check if address exists
         const hasAddress = user?.address && user.address.street;
-        
+
         try {
           if (!hasAddress && (addressPayload.street || addressPayload.city)) {
             // Create new address
@@ -408,7 +425,7 @@ export default function EditProfile() {
         if (profilePictureUrl) {
           updatedUser.profilePicture = profilePictureUrl;
         }
-        
+
         localStorage.setItem("userInfo", JSON.stringify(updatedUser));
         setUser(updatedUser);
         window.dispatchEvent(new Event("storage"));
@@ -418,11 +435,11 @@ export default function EditProfile() {
       }
     } catch (err) {
       console.error("Update error:", err);
-      
+
       if (err.response) {
         console.error("Response status:", err.response.status);
         console.error("Response data:", err.response.data);
-        
+
         if (err.response.status === 401 || err.response.status === 403) {
           toast.error("Session expired. Please login again.");
           clearAuthData();
@@ -458,8 +475,12 @@ export default function EditProfile() {
       <div className="min-h-screen flex flex-col justify-center items-center bg-[#f8f7f6]">
         <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center">
           <div className="text-5xl mb-4">😔</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">No Profile Found</h2>
-          <p className="text-gray-600 mb-6">Unable to load profile information.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            No Profile Found
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Unable to load profile information.
+          </p>
           <button
             onClick={() => navigate("/profile")}
             className="px-6 py-3 bg-[#dfa26d] text-white rounded-lg hover:bg-[#c98f5f] transition font-semibold"
@@ -494,18 +515,20 @@ export default function EditProfile() {
               </p>
             </div>
             {userType === "admin" && user?.role && (
-              <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                user.role === "super-admin" 
-                  ? "bg-purple-100 text-purple-700" 
-                  : "bg-blue-100 text-blue-700"
-              }`}>
+              <span
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  user.role === "super-admin"
+                    ? "bg-purple-100 text-purple-700"
+                    : "bg-blue-100 text-blue-700"
+                }`}
+              >
                 {user.role}
               </span>
             )}
           </div>
 
           {/* Profile Image Upload */}
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 p-4 bg-gray-50 rounded-xl">
+          {/* <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 p-4 bg-gray-50 rounded-xl">
             <div className="relative">
               <img
                 src={
@@ -544,7 +567,7 @@ export default function EditProfile() {
                 </p>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Form Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -579,7 +602,9 @@ export default function EditProfile() {
                 disabled={userType === "admin"} // Admin email usually can't be changed
               />
               {userType === "admin" && (
-                <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Email cannot be changed
+                </p>
               )}
             </div>
 
@@ -685,7 +710,7 @@ export default function EditProfile() {
             >
               Cancel
             </button>
-            
+
             <button
               onClick={handleUpdateProfile}
               disabled={saving || !form.name || !form.email}
@@ -706,7 +731,6 @@ export default function EditProfile() {
           </div>
 
           {/* Debug Info */}
-          
         </div>
       </div>
     </div>

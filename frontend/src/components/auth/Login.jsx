@@ -223,11 +223,7 @@ const Login = () => {
       <button
         type="submit"
         disabled={loading || animationStage !== "idle"}
-        className={`w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 ${
-          isAdminLogin
-            ? "bg-[#c85a32] hover:bg-[#b34a22] text-white"
-            : "bg-[#dfa26d] hover:bg-[#e6b07c] text-white"
-        }`}
+        className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
       >
         {loading ? (
           <span className="flex items-center justify-center">
@@ -244,17 +240,15 @@ const Login = () => {
       {/* Switch Type Hint */}
       <div className="flex justify-between items-center">
         {/* Forgot Password */}
- 
-  <div className="">
-    <NavLink
-      to="/forgot-password"
-      className="text-sm font-medium text-[#c85a32] hover:text-[#b34a22] hover:underline transition-colors"
-    >
-      Forgot Password?
-    </NavLink>
 
-  </div>
-  
+        <div>
+          <NavLink
+            to={isAdminLogin ? "/admin/forgot-password" : "/forgot-password"}
+            className="text-sm font-medium text-[#c85a32] hover:text-[#b34a22] hover:underline transition-colors"
+          >
+            Forgot Password?
+          </NavLink>
+        </div>
 
         <button
           type="button"
@@ -265,20 +259,18 @@ const Login = () => {
           <i className={`bx bx-${isAdminLogin ? "user" : "crown"} mr-1`}></i>
           Switch to {isAdminLogin ? "User" : "Admin"} Login
         </button>
-      
       </div>
-      
-{isAdminLogin && (
-  <div className="text-center mt-4">
-    <a
-      href="/super-admin/register"
-      className="inline-block text-[#c85a32] font-semibold hover:underline hover:text-[#b34a22] transition-colors"
-    >
-      Register for Super Admin
-    </a>
-  </div>
-)}
 
+      {isAdminLogin && (
+        <div className="text-center mt-4">
+          <a
+            href="/super-admin/register"
+            className="inline-block text-[#c85a32] font-semibold hover:underline hover:text-[#b34a22] transition-colors"
+          >
+            Register for Super Admin
+          </a>
+        </div>
+      )}
 
       {/* Error Message */}
       {message && (
@@ -294,18 +286,17 @@ const Login = () => {
       {/* <div className="mt-4 p-2 bg-gray-100 rounded text-xs text-gray-500">
         <p>Debug: Storing token as "token" and "userToken"</p>
       </div> */}
-         {!isAdminLogin && (
-  <p className="text-center text-sm text-gray-600 mt-3">
-    Don’t have an account?{" "}
-    <NavLink
-      to="/register"
-      className="text-[#c85a32] font-semibold hover:underline"
-    >
-      Register
-    </NavLink>
-  </p>
-)}
-
+      {!isAdminLogin && (
+        <p className="text-center text-sm text-gray-600 mt-3">
+          Don’t have an account?{" "}
+          <NavLink
+            to="/register"
+            className="text-[#c85a32] font-semibold hover:underline"
+          >
+            Register
+          </NavLink>
+        </p>
+      )}
     </form>
   );
 
@@ -315,7 +306,6 @@ const Login = () => {
         <div className="w-16 h-16 border-4 border-[#dfa26d] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-gray-600 font-medium">
           Switching to {!isAdminLogin ? "Admin" : "User"} login...
-          
         </p>
       </div>
     </div>
@@ -332,7 +322,7 @@ const Login = () => {
             disabled={animationStage !== "idle"}
             className={`flex-1 py-4 font-semibold transition-all duration-300 disabled:opacity-50 ${
               !isAdminLogin
-                ? "bg-[#dfa26d] text-white shadow-inner"
+                ? "bg-[#c85a31] hover:bg-[#b34a22] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-50"
             }`}
           >
@@ -344,7 +334,7 @@ const Login = () => {
             disabled={animationStage !== "idle"}
             className={`flex-1 py-4 font-semibold transition-all duration-300 disabled:opacity-50 ${
               isAdminLogin
-                ? "bg-[#c85a32] text-white shadow-inner"
+                ? "bg-[#c85a31] hover:bg-[#b34a22] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-50"
             }`}
           >

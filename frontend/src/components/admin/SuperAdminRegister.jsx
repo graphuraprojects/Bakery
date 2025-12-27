@@ -37,10 +37,10 @@ const SuperAdminRegister = () => {
 
     try {
       const res = await axios.post("/api/admin/super-admin/register", form);
-      
+
       setMsg(res.data.message);
       toast.success(res.data.message);
-      
+
       // Small delay before navigation to show success message
       setTimeout(() => {
         navigate("/login");
@@ -49,7 +49,10 @@ const SuperAdminRegister = () => {
       const errorMsg = err.response?.data?.message || "Registration failed";
       setMsg(errorMsg);
       toast.error(errorMsg);
-      console.error("❌ Registration error:", err.response?.data || err.message);
+      console.error(
+        "❌ Registration error:",
+        err.response?.data || err.message
+      );
     } finally {
       setLoading(false);
     }
@@ -64,9 +67,7 @@ const SuperAdminRegister = () => {
             <i className="bx bx-crown text-4xl mr-2"></i>
             Super Admin Registration
           </h1>
-          <p className="text-orange-100">
-            Create a new super admin account
-          </p>
+          <p className="text-orange-100">Create a new super admin account</p>
         </div>
 
         {/* Registration Form */}
@@ -146,7 +147,9 @@ const SuperAdminRegister = () => {
                 className="absolute right-3 top-3.5 text-gray-500 hover:text-gray-700"
               >
                 <i
-                  className={`text-xl ${showPassword ? "bx bx-hide" : "bx bx-show"}`}
+                  className={`text-xl ${
+                    showPassword ? "bx bx-hide" : "bx bx-show"
+                  }`}
                 ></i>
               </button>
             </div>
@@ -178,7 +181,9 @@ const SuperAdminRegister = () => {
                 className="absolute right-3 top-3.5 text-gray-500 hover:text-gray-700"
               >
                 <i
-                  className={`text-xl ${showSecretKey ? "bx bx-hide" : "bx bx-show"}`}
+                  className={`text-xl ${
+                    showSecretKey ? "bx bx-hide" : "bx bx-show"
+                  }`}
                 ></i>
               </button>
             </div>
@@ -191,7 +196,7 @@ const SuperAdminRegister = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 bg-[#c85a32] hover:bg-[#b34a22] text-white disabled:opacity-60 mb-3"
+            className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
           >
             {loading ? (
               <span className="flex items-center justify-center">
@@ -230,21 +235,27 @@ const SuperAdminRegister = () => {
 
           {/* Message Display */}
           {msg && (
-            <div className={`mt-3 p-3 rounded-lg border ${
-              msg.includes("success") || msg.includes("Success") 
-                ? "bg-green-50 border-green-200" 
-                : "bg-red-50 border-red-200"
-            }`}>
-              <p className={`text-center font-semibold ${
+            <div
+              className={`mt-3 p-3 rounded-lg border ${
                 msg.includes("success") || msg.includes("Success")
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}>
-                <i className={`bx ${
+                  ? "bg-green-50 border-green-200"
+                  : "bg-red-50 border-red-200"
+              }`}
+            >
+              <p
+                className={`text-center font-semibold ${
                   msg.includes("success") || msg.includes("Success")
-                    ? "bx-check-circle"
-                    : "bx-error-circle"
-                } mr-2`}></i>
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                <i
+                  className={`bx ${
+                    msg.includes("success") || msg.includes("Success")
+                      ? "bx-check-circle"
+                      : "bx-error-circle"
+                  } mr-2`}
+                ></i>
                 {msg}
               </p>
             </div>

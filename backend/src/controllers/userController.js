@@ -7,8 +7,7 @@ exports.updateProfile = async (req, res) => {
     const { name, email, username } = req.body;
 
     const user = await User.findById(req.user.id);
-    if (!user)
-      return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     user.name = name || user.name;
     user.email = email || user.email;
@@ -49,7 +48,6 @@ exports.uploadProfilePic = async (req, res) => {
   }
 };
 
-
 /* ================= REMOVE PROFILE PIC ================= */
 exports.removeProfilePic = async (req, res) => {
   try {
@@ -75,7 +73,6 @@ exports.removeProfilePic = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 /* ================= DELETE ACCOUNT ================= */
 exports.deleteAccount = async (req, res) => {
@@ -125,8 +122,7 @@ exports.updateAddress = async (req, res) => {
     const { street, city, state, pincode } = req.body;
 
     const user = await User.findById(req.user.id);
-    if (!user)
-      return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     user.address.street = street || user.address.street;
     user.address.city = city || user.address.city;

@@ -19,6 +19,33 @@ const VerifyOTP = () => {
   const inputRefs = React.useRef([]);
 
   useEffect(() => {
+    const role = localStorage.getItem("fpRole");
+
+    // 🔹 FORGOT PASSWORD FLOW (USER / ADMIN)
+    if (role === "user" || role === "admin") {
+      const email =
+        role === "admin"
+          ? localStorage.getItem("adminFpEmail")
+          : localStorage.getItem("fpEmail");
+
+      if (!email) {
+        toast.error("Email missing. Please restart forgot password process.");
+        navigate(
+          role === "admin" ? "/admin/forgot-password" : "/forgot-password"
+        );
+        return;
+      }
+
+      setUserDetails({
+        email,
+        phone: "",
+        name: "",
+      });
+
+      return;
+    }
+
+    // 🔹 REGISTRATION FLOW
     const saved = localStorage.getItem("userInfo");
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -29,7 +56,7 @@ const VerifyOTP = () => {
       });
     } else {
       toast.error("User info missing. Please register again.");
-      setTimeout(() => navigate("/register"), 2000);
+      navigate("/register");
     }
   }, [navigate]);
 
@@ -105,10 +132,7 @@ const VerifyOTP = () => {
 
       console.log("🔄 Verifying OTP for:", userDetails.email);
 
-      const res = await axios.post(
-        `/api/auth/verify-otp`,
-        payload
-      );
+      const res = await axios.post(`/api/auth/verify-otp`, payload);
 
       console.log("✅ OTP Verification Response:", res.data);
 
@@ -225,7 +249,7 @@ const VerifyOTP = () => {
         <button
           onClick={handleVerifyOtp}
           disabled={loading || otp.join("").length !== 6}
-          className="w-full bg-[#dfa26d] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#e6b07c] transition-all duration-300 disabled:opacity-60 mb-3 flex items-center justify-center gap-2"
+          className="w-full font-semibold py-3 rounded-lg shadow-md transition-all duration-300 disabled:opacity-60 mb-3 bg-[#c85a31] hover:bg-[#b34a22] text-white"
         >
           {loading ? (
             <>
