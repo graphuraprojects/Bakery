@@ -10,23 +10,25 @@ const crypto = require("crypto");
 dotenv.config();
 const app = express();
 
-/* ===================== BASIC MIDDLEWARE ===================== */
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://bakery-oa9j.vercel.app/",
-      "https://bakery-oa9j-git-main-graphura-india-pvt-ltds-projects.vercel.app/",
-      "https://bakery-oa9j-vboodczv7-graphura-india-pvt-ltds-projects.vercel.app/",
+      "https://bakery-oa9j.vercel.app",
+      "https://bakery-oa9j-git-main-graphura-india-pvt-ltds-projects.vercel.app",
+      "https://bakery-oa9j-vboodczv7-graphura-india-pvt-ltds-projects.vercel.app",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Log every request
+// Log every request.
 app.use((req, res, next) => {
   console.log(`📨 ${req.method} ${req.url}`);
   next();
