@@ -11,15 +11,7 @@ dotenv.config();
 const app = express();
 
 /* ===================== BASIC MIDDLEWARE ===================== */
-app.use(
-  cors({
-    origin: [
-      "*"
-    ],
-    credentials: true,
-  })
-);
-
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
