@@ -14,10 +14,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      "https://bakery-website-jet.vercel.app",
-      "https://bakery-website-qick6y1xl-vivek-kumars-projects-c1d529b0.vercel.app/",
-      "https://bakery-website-git-main-vivek-kumars-projects-c1d529b0.vercel.app/",
+      "*"
     ],
     credentials: true,
   })
