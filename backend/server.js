@@ -14,10 +14,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://bakery-oa9j.vercel.app",
-      "https://bakery-website-jet.vercel.app",
-      "https://bakery-oa9j-git-main-graphura-india-pvt-ltds-projects.vercel.app",
-      "https://bakery-oa9j-vboodczv7-graphura-india-pvt-ltds-projects.vercel.app",
+      "https://bakery-pied-six.vercel.app/",
+      
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
